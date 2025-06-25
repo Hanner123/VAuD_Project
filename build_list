@@ -1,0 +1,68 @@
+clientNode{
+    node left blue;
+    node right green;
+
+    init() {
+        left = null;
+        right = null;
+        }
+
+    timeout() {
+        if (left != null) {
+            if (id(left) < id(this)) {
+                left -> linearize(this);
+            }
+            else{ 
+                this -> linearize(left);
+                left = null;
+            }
+        }
+        if (right != null){
+            print("check if right is bigger");
+            if (id(right) > id(this)) {
+                right -> linearize(this);
+            }
+            else{
+                this -> linearize(right);
+                right = null;
+            }
+        }
+        
+    }
+    linearize(node v){
+        print("linearize");
+        if (left == null) {
+            left = v;
+            print("left gesetzt auf " + id(v));
+            return;
+        }
+        if (left != null) {
+            if (id(v) < id(left)) {
+                left -> linearize(v);
+            }
+            if ((id(left) < id(v)) && (id(v) < id(this))) { 
+                v -> linearize(left);
+                left = v;
+            }
+        }
+        if (right == null) {
+            right = v;
+            print("right gesetzt auf " + id(v));
+            return;
+        }
+        if (right != null){
+            if ((id(this) < id(v)) && (id(v) < id(right))) {
+                v -> linearize(right);
+                right = v;
+            }
+            if (id(right) < id(v)) {
+                right -> linearize(v);
+            }
+        }
+    }
+
+    entry(node C) {
+        linearize(C);
+    }
+
+}

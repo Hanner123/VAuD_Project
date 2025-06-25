@@ -1,0 +1,21 @@
+clientNode{
+    node left blue;
+    node right green;
+
+    init() {
+        left = null;
+        right = null;
+        }
+
+    timeout() {
+        Regel 1a und 1b
+    }
+    linearize(node v){
+        regel 2
+    }
+
+    entry(node C) {
+        linearize(C);
+    }
+
+}

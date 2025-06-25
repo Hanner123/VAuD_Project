@@ -1,0 +1,77 @@
+clientNode {
+    node left blue;     
+    node right green;    
+    node left2 red;     
+    node right2 red;   
+
+    init() {
+        left = null;
+        right = null;
+        left2 = null;
+        right2 = null;
+    }
+
+    timeout() {
+    if (left != null) {
+        if (id(left) < id(this)) {
+            left -> linearize(this);
+        } else {
+            this -> linearize(left);
+            left = null;
+        }
+    }
+
+    if (right != null) {
+        if (id(right) > id(this)) {
+            right -> linearize(this);
+        } else {
+            this -> linearize(right);
+            right = null;
+        }
+    }
+
+    if (left != null && right != null) {
+        left -> linearize(right); 
+        right -> linearize(left);
+    }
+}
+
+    linearize(node v) {
+        int vid = id(v);
+        int myid = id(this);
+
+        if (vid < myid) {
+            if (left == null || vid > id(left)) {
+                left2 = left;
+                left = v;
+                print("left gesetzt auf " + id(v));
+                return;
+            } else if ((left2 == null || vid > id(left2)) && vid < id(left)) {
+                left2 = v;
+                print("left2 gesetzt auf " + id(v));
+                return;
+            } else {
+                if (left != null) left -> linearize(v);
+            }
+        }
+
+        if (vid > myid) {
+            if (right == null || vid < id(right)) {
+                right2 = right;
+                right = v;
+                print("right gesetzt auf " + id(v));
+                return;
+            } else if ((right2 == null || vid < id(right2)) && vid > id(right)) {
+                right2 = v;
+                print("right2 gesetzt auf " + id(v));
+                return;
+            } else {
+                if (right != null) right -> linearize(v);
+            }
+        }
+    }
+
+    entry(node c) {
+        linearize(c);
+    }
+}
