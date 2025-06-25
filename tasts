@@ -1,0 +1,28 @@
+clientNode{
+    string bit_string;
+
+    init() {
+        bit_string= bitfolge(id(this));
+        }
+
+    bitfolge string (int x) {
+        int prime = 97;
+        int res = (x * 37 + 17) % prime;
+                print(res);
+        int bit = 0;
+        string bits = "";
+        int i = 0;
+        for (i=0; i<5; i++){
+            bit = res%2;
+            if (bit == 1){
+                bits = "1" + bits;
+            }
+            else {
+                bits = "0" + bits;
+            }
+            res = res/2;
+        }
+        print(bits);
+        return bits;
+    }
+}
