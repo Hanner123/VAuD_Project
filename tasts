@@ -4,6 +4,29 @@ clientNode{
     init() {
         bit_string= bitfolge(id(this));
         }
+    
+    timeout(){
+        int j;
+        int limit;
+        limit = 5;
+        string minPredBit;
+        string vBit;
+        minPredBit = "11111";
+        vBit = "11110";
+        bool smaller_than_pred;
+        smaller_than_pred = false;
+
+        for(j=0; j<limit; j++){
+            if (integer(sub_str(vBit, j, j+1)) < integer(sub_str(minPredBit, j, j+1))){
+                print(j);
+                smaller_than_pred = true;
+                print("v is smaller");
+                break;
+            }
+        }
+        
+    }  
+         
 
     bitfolge string (int x) {
         int prime = 97;
@@ -24,5 +47,12 @@ clientNode{
         }
         print(bits);
         return bits;
+    }
+    integer int (string x){
+        if (x == "1"){
+            return 1;
+        } else {
+            return 0;
+        }   
     }
 }
