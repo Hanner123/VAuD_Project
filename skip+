@@ -3,6 +3,7 @@ succPredListclientNode{
     string bitString;
     [string, node] succPredList;
     [string, node] neighbors;  /*[bitstring, node]*/
+    node[] tempArray;
 
     /* [0, 1, 2, 3, 4, 5][succ0, succ1, pred0, pred1][node] */
     /* [0_succ0, 0_succ1, 0_pred0, 0_pred1]*/
@@ -20,23 +21,73 @@ succPredListclientNode{
 /* How to get to know new neighbors? When update succPredList */
 
     timeout() {
+        /* ToDo: Wir müssen hier auch noch die Präfixübereinstimmung hier überall mit einbauen */
+
         print("timeout");
         /* Regel 1a (linearisieren) */
+        
+        node[] nearestLeft;
+        node[] nearestRight;
 
+        print(length(neighbors));
+
+        tempArray <<<<;
+        int currentLevel;
+        for(currentLevel=0; currentLevel<limit; currentLevel++)
+        {
+            sortedLeftNeighbors(currentLevel); /*tempArray wird mit sorted LeftNeighbors der richtigen Ebene gefüllt*/
+            print("Laenge:");
+            print(length(tempArray));
+
+            int i;
+            for(i=0; i< length(tempArray)-1; i++){
+                tempArray[i] -> linearize(tempArray[i+1]);
+            }
+            tempArray[i] -> linearize(this); 
+            nearestLeft[currentLevel] = tempArray[i];
+
+            tempArray <<<<;
+            sortedRightNeighbors(currentLevel); /*tempArray wird mit sorted RightNeighbors der richtigen Ebene gefüllt*/
+
+            int j;
+            for(j= length(tempArray); j > 1; j--){
+                tempArray[j] -> linearize(tempArray[j-1]);
+            } 
+                
+            tempArray[j] -> linearize(this);
+            nearestRight[currentLevel] = tempArray[j];
+        }
         /* Für jeden i stellt u periodisch alle Knoten aus Ni(u) vor */
         /* Regel 1b */
+        for(currentLevel=0; currentLevel<limit; currentLevel++)
+        {
+            tempArray <<<<;
+            sortedLeftNeighbors(currentLevel); /*tempArray wird mit sorted LeftNeighbors der richtigen Ebene gefüllt*/
+            
+            for(i=0; i< length(tempArray); i++){
+                tempArray[i] -> linearize(nearestRight[currentLevel]);
+            }
 
+            tempArray <<<<;
+            sortedRightNeighbors(currentLevel); /*tempArray wird mit sorted RightNeighbors der richtigen Ebene gefüllt*/
 
+            for(j= length(tempArray); j > 0; j--){
+                tempArray[j] -> linearize(nearestLeft[currentLevel]);
+            } 
+            tempArray <<<<;
+        }
 
         /* Hier rufen wir systematisch das linearize der nachbar knoten auf und stellen uns somit bei den Nachbarn vor */
     }
     linearize(node v){
         print("linearize");
+        print(id(v));
         /* Regel 2 (überbrücken) */
         /* Hier erhalten wir die Vorgestellten Knoten und aktualisiern unsere Nachbarn / succPredList */
 
         /** 1. Aktualisiere Ranges und Nachbarschaft für jedes Level i */
         /** 2. Jeder Knoten w, der nun nicht mehr im range liegt -> delegieren (linearize bei anderem Knoten) zu Knoten mit größter Präfixübereinstimmung*/
+        
 
         string vBit;
         vBit = bitfolge(id(v));
@@ -46,126 +97,146 @@ succPredListclientNode{
 
         int currentLevel = 0;
 
+        [string, node] globalNewNeighbors;  /*[bitstring, node]*/
+
         for(currentLevel = 0; currentLevel<limit; currentLevel++){
-            node minPred = minPred(currentLevel);
-            node maxSucc = maxSucc(currentLevel);
-
-            bool inRange;
+            /* if prefix is the same!!!*/
             
-            if ((minPred != null) && (maxSucc != null)){       
-                bool biggerThanSucc;
-                biggerThanSucc = false;
-                bool smallerThanPred;
-                smallerThanPred = false;
-                
+            if(checkIfNodeOnLevel(currentLevel, v) == true){  
+                bool inRange;
+                bool pred_0_is_null;
+                pred_0_is_null = (succPredList[currentLevel + "_pred0"] == null);
+                bool bit_after_prefix_is_0;
+                bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 0);
 
-                if(id(v) > id(maxSucc)){
-                    biggerThanSucc = true;
+                if (pred_0_is_null && bit_after_prefix_is_0 && (id(v) < id(this)) ){
+                    succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
+                    neighbors[vBit] = v;
+                }
+                if (pred_1_is_null && bit_after_prefix_is_1 && (id(v) < id(this)) ){
+
+                }
+                if (succ_0_is_null && bit_after_prefix_is_0 && (id(v) > id(this)) ){
+
+                }
+                if (succ_1_is_null && bit_after_prefix_is_1 && (id(v) > id(this)) ){
+
+                }
+                /* alle anderen */
+
+                inRange = CheckIfNodeInRange(currentLevel, v);
+                print("In Range: " + inRange);
+                if(minPred(currentLevel)==null){
+                    print("min pred is null");
+                    /*schaue ob es ein pred sein kann (muss kleiner sein als this)*/
+                    if (id(v) < id(this)){
+                        vUsed = true;
+                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                            succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
+                            neighbors[vBit] = v;
+                            print(length(neighbors));
+                        }
+                        else{
+                            succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
+                            neighbors[vBit] = v;
+                            print(length(neighbors));
+                        }
+                        print("pred aktualisieren");
+                    }
+                    else{
+                        /*wenn nein: KP*/
+                        inRange = false;
+                    }
+                    
+                }
+                if(maxSucc(currentLevel)==null){
+                    print("max succ is null");
+                    /*schaue ob es ein succ sein kann (muss größer sein als this)*/
+                    if (id(v) > id(this)){
+                        vUsed = true;
+                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                            succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
+                            neighbors[vBit] = v;
+                            print(length(neighbors));
+                        }
+                        else{
+                            succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
+                            neighbors[vBit] = v;
+                            print(length(neighbors));
+                        }
+                        print("succ aktualisieren");
+                    }
+                    else{
+                        inRange = false;
+                    }
                 }
 
-                if(id(v) < id(minPred)){
-                    smallerThanPred = true;
-                }
-                
-                inRange = !(biggerThanSucc || smallerThanPred); 
-            }
-            
-            if(minPred==null){
-                /*schaue ob es ein pred sein kann (muss kleiner sein als this)*/
-                if (id(v) < id(this)){
+
+                if(inRange){
                     vUsed = true;
-                    if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
-                        succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
-                        neighbors[vBit] = v;
+                    print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");
+                    /*Nicht mehr gebrauchte Knoten weiterleiten*/
+                    if (id(v) > id(this)){
+                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                            succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
+                            neighbors[vBit] = v;
+                        }
+                        else{
+                            succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
+                            neighbors[vBit] = v;
+                        }
                     }
-                    else{
-                        succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
-                        neighbors[vBit] = v;
+                    if (id(v) < id(this)){
+                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                            succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
+                            neighbors[vBit] = v;
+                        }
+                        else{
+                            succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
+                            neighbors[vBit] = v;
+                        }
                     }
-                }
-                else{
-                    /*wenn nein: KP*/
-                    inRange = false;
                 }
                 
-            }
-            if(maxSucc==null){
-                /*schaue ob es ein succ sein kann (muss größer sein als this)*/
-                if (id(v) > id(this)){
-                    vUsed = true;
-                    if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
-                        succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
-                        neighbors[vBit] = v;
-                    }
-                    else{
-                        succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
-                        neighbors[vBit] = v;
-                    }
-                }
-                else{
-                    /*wenn nein: KP*/
-                    inRange = false;
-                }
-            }
 
+                for (string bitString : node neighbor : neighbors){
 
-            if(inRange){
-                vUsed = true;
-                print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");
-                /*Nicht mehr gebrauchte Knoten weiterleiten*/
-                if (id(v) > id(this)){
-                    if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
-                        /*Welche Knoten gehören nicht mehr zur neighbor (in die range)*/
-                        /* pro ebene hinzufügen was wir nicht mehr brauchen*/
+                    inRange = CheckIfNodeInRange(currentLevel, neighbor);
+                    
+                    if(inRange){
+                        globalNewNeighbors[bitString] = neighbor;
+                    }
 
-                        /*global (über alle ebenen): die Knoten, die in keiner neighbor liste sind deligieren und streichen*/
-                        
-                        succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
-                        neighbors[vBit] = v;
-                    }
-                    else{
-                        succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
-                        neighbors[vBit] = v;
-                    }
-                    /*ist der neue succ dann der max succ? */
-                    /*wenn ja: weiter entfernte Knoten deligieren */
                 }
-                if (id(v) < id(this)){
-                    if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
-                        succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
-                        neighbors[vBit] = v;
-                    }
-                    else{
-                        succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
-                        neighbors[vBit] = v;
-                    }
-                    /*ist der neue pred dann der min pred? */
-                    /*wenn ja: weiter entfernte Knoten deligieren (bzw. ins array zum deligieren aufnehmen) */
-                }
-                /*globalen min_pred und max succ bestimmen (in der schleife oder danach) und dann löschen/deligieren?*/
-                /*innerhalb der range - also ranges und nachbarschaften aktualisieren!*/
             }
 
         }
         
-        /*Alle nnachbarkknoten weiterleiten die wir oben rauslöschen */
+        /*Alle nachbarkknoten weiterleiten die wir oben rauslöschen */
+        for (string bitString : node neighbor : neighbors){
+
+            if(globalNewNeighbors[bitString] == null){
+                /* Knoten wird nicht mehr gebraucht -> weiterleiten*/
+                forwardNode(neighbor);
+            }
+        }
+
+        neighbors <<<<; /*neighbors empty machen*/
+        for (string bitString : node neighbor : globalNewNeighbors){ /*neighbor Liste überschreiben*/
+            neighbors[bitString] = neighbor;
+        }
 
         if(!vUsed){
             /* Weiterleiten von v */
-            node nextNode;
-            nextNode = getLongestCommonPrefixNode(vBit);
-            if(nextNode != null){
-                nextNode -> linearize(v);
-            } else {
-                /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
-                /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
-            }
+            forwardNode(v);
         }
             
     }
     
 
     entry(node C) {
+        print("Entry: linearize");
+        print(id(C));
         linearize(C);
     }
 
@@ -177,6 +248,17 @@ succPredListclientNode{
         }   
     }
 
+    checkIfNodeOnLevel bool (int currentLevel, node v){
+        int common_prefix_length;
+        common_prefix_length = longestCommonPrefix(bitString, bitfolge(id(v)));
+        if (common_prefix_length >= currentLevel){
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
 
     bitfolge string (int x) {
         int prime = 97;
@@ -243,7 +325,6 @@ succPredListclientNode{
                 break;
             }
         }
-
         return commonLength;
     }
 
@@ -266,5 +347,101 @@ succPredListclientNode{
         return nextNode;
     }
     
-    
+
+    CheckIfNodeInRange bool (int currentLevel, node v){
+        node minPred = minPred(currentLevel);
+        node maxSucc = maxSucc(currentLevel);
+
+        bool inRange;
+        inRange = false;
+            
+        if ((minPred != null) && (maxSucc != null)){       
+            bool biggerThanSucc;
+            biggerThanSucc = false;
+            bool smallerThanPred;
+            smallerThanPred = false;
+            
+
+            if(id(v) > id(maxSucc)){
+                biggerThanSucc = true;
+            }
+
+        
+            if(id(v) < id(minPred)){
+                smallerThanPred = true;
+            }
+            
+            inRange = !(biggerThanSucc || smallerThanPred); 
+        }
+        else if ((minPred == null) && (maxSucc == null)){
+            inRange = true;
+        }
+        else if ((minPred == null) && (maxSucc != null) && (id(v) < id(maxSucc))){
+            inRange = true;
+        }
+        else if ((minPred != null) && (maxSucc == null) && (id(v) > id(minPred))){
+            inRange = true;
+        }
+        return inRange;
+    }
+
+    forwardNode (node forwardedNode) {
+        node longestCommonPrefixNode;
+        string bitString;
+        bitString = bitfolge(id(forwardedNode));
+        longestCommonPrefixNode = getLongestCommonPrefixNode(bitString);
+        if(longestCommonPrefixNode != null){
+            longestCommonPrefixNode -> linearize(forwardedNode);
+        } else {
+            print("Neiiiin");
+            /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
+            /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
+        }
+    }
+
+    sortedLeftNeighbors(int currentLevel){
+        node[] arr;
+        int i = 0;
+        tempArray <<<<;
+        for (string neighborBit : node neighbor : neighbors){
+            if ((checkIfNodeOnLevel(currentLevel, neighbor))&&(id(neighbor) < id(this))){ /*collect smaller nodes*/
+                tempArray[i] = neighbor;
+            }
+            i = i+1;
+        }
+        bubbleSort();
+        return;
+    }
+
+    sortedRightNeighbors (int currentLevel){
+        node[] arr;
+        int i = 0;
+        tempArray <<<<;
+        for (string neighborBit : node neighbor : neighbors){
+            if ((checkIfNodeOnLevel(currentLevel, neighbor))&&(id(neighbor) > id(this))){ /*collect bigger nodes on same level*/
+                tempArray[i] = neighbor;
+            }
+            i = i+1;
+        }
+        bubbleSort();
+        return;
+    }
+
+    bubbleSort () {
+        int n;
+        n = length(tempArray);
+        int i;
+        int j;
+        node temp;
+        for(i = 0; i < n-1; i++) {
+            for(j = 0; j < n-i-1; j++) {
+                if(id(tempArray[j]) > id(tempArray[j+1])) {
+                    temp = tempArray[j];
+                    tempArray[j] = tempArray[j+1];
+                    tempArray[j+1] = temp;
+                }
+            }
+        }
+        return;
+    }
 }

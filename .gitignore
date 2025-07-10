@@ -1,0 +1,8 @@
+# Ignore directories
+lib/
+bin/
+
+# Ignore specific files
+COPYING
+Launcher.jar
+skip+.java
