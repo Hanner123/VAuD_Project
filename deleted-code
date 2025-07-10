@@ -1,0 +1,31 @@
+    vIsSmaller bool (string vBit, string pred){
+        int j;
+        bool smallerThanPred;
+        smallerThanPred = false;
+
+        for(j=0; j<limit; j++){
+            if (integer(sub_str(vBit, j, j+1)) < integer(sub_str(pred, j, j+1))){
+                smallerThanPred = true;
+                print(j);
+                print("v is smaller");
+                return true;
+            }
+        }
+        return false;
+    }
+
+    vIsBigger bool (string vBit, string succ){
+        int j;
+        bool biggerThanSucc;
+        biggerThanSucc = false;
+
+        for(j=0; j<limit; j++){
+            if (integer(sub_str(vBit, j, j+1)) > integer(sub_str(succ, j, j+1))){
+                biggerThanSucc = true;
+                print(j);
+                print("v is bigger");
+                return true;
+            }
+        }
+        return false;
+    }
