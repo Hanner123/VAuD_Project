@@ -10,6 +10,9 @@ succPredListclientNode{
 
     init() {
         bitString= bitfolge(id(this));
+        print("Meine ID ist " + id(this));
+        print("Meine Bitfolge ist " + bitString);
+        print("erstes Bit: " + sub_str(bitString, 0, 1));
         int currentLevel;
         for(currentLevel = 0; currentLevel < limit; currentLevel++) {
             succPredList[currentLevel + "_succ0"] = null;
@@ -114,7 +117,7 @@ succPredListclientNode{
                 bool succ_1_is_null;
                 succ_1_is_null = (succPredList[currentLevel + "_succ1"] == null);
                 bool bit_after_prefix_is_0;
-                bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 0);
+                bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel, currentLevel+1)) == 0);
                 if (pred_0_is_null && bit_after_prefix_is_0 && (id(v) < id(this)) ){
                     print("pred_0 is null, v wird pred_0");
                     succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
@@ -131,7 +134,8 @@ succPredListclientNode{
                     neighbors[vBit] = v;
                 }
                 if (succ_1_is_null && (!bit_after_prefix_is_0) && (id(v) > id(this)) ){
-                    print("succ_1 is null, v wird succ_1");
+                    print("!!!!succ_1 is null, v wird succ_1!!!!");
+                    print("Bit after prefix is: " + integer(sub_str(vBit, currentLevel, currentLevel+1)));
                     succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ, hier auch Neighbors hinzufügen!*/
                     neighbors[vBit] = v;
                 }
@@ -144,7 +148,7 @@ succPredListclientNode{
                     /*schaue ob es ein pred sein kann (muss kleiner sein als this)*/
                     if (id(v) < id(this)){
                         vUsed = true;
-                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                        if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                             neighbors[vBit] = v;
                             print(length(neighbors));
@@ -167,7 +171,7 @@ succPredListclientNode{
                     /*schaue ob es ein succ sein kann (muss größer sein als this)*/
                     if (id(v) > id(this)){
                         vUsed = true;
-                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                        if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
                             neighbors[vBit] = v;
                             print(length(neighbors));
@@ -190,7 +194,7 @@ succPredListclientNode{
                     print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");
                     /*Nicht mehr gebrauchte Knoten weiterleiten*/
                     if (id(v) > id(this)){
-                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                        if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
                             neighbors[vBit] = v;
                         }
@@ -200,7 +204,7 @@ succPredListclientNode{
                         }
                     }
                     if (id(v) < id(this)){
-                        if(integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 1){/*ist das i+1. bit eine 0 oder 1*/
+                        if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                             neighbors[vBit] = v;
                         }

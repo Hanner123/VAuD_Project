@@ -187,7 +187,7 @@ print("bubbleSort returned");
 long callCounterinit;
 protected void funinit() { callCounterinit++; try {
 v2=funbitfolge(id(this));
-int v6 = 0;
+print(("Meine ID ist "+id(this)));print(("Meine Bitfolge ist "+v2));print(("erstes Bit: "+sub_str(v2, 0, 1)));int v6 = 0;
 for(v6=0;(v6<v1);v6=v6+1){{
 updateVisualization(v3,null,true,"black",0,(v6+"_succ0"));
 updateVisualization(v3,null,true,"black",0,(v6+"_succ1"));
@@ -250,7 +250,7 @@ v22=((getArrayIndex(v3,null,(v17+"_succ0"))!=null?((Edge)(getArrayIndex(v3,null,
 boolean v23 = false;
 v23=((getArrayIndex(v3,null,(v17+"_succ1"))!=null?((Edge)(getArrayIndex(v3,null,(v17+"_succ1")))).node:null)==null);
 boolean v24 = false;
-v24=(funinteger(sub_str(v15, (v17+1), (v17+2)))==0);
+v24=(funinteger(sub_str(v15, v17, (v17+1)))==0);
 if(((v20&&v24)&&(id(p14)<id(this)))){{
 print("pred_0 is null, v wird pred_0");updateVisualization(v3,p14,true,"black",0,(v17+"_pred0"));
 updateVisualization(v4,p14,true,"black",0,v15);
@@ -264,14 +264,14 @@ print("succ_0 is null, v wird succ_0");updateVisualization(v3,p14,true,"black",0
 updateVisualization(v4,p14,true,"black",0,v15);
 }
 }if(((v23&&(!v24))&&(id(p14)>id(this)))){{
-print("succ_1 is null, v wird succ_1");updateVisualization(v3,p14,true,"black",0,(v17+"_succ1"));
+print("!!!!succ_1 is null, v wird succ_1!!!!");print(("Bit after prefix is: "+funinteger(sub_str(v15, v17, (v17+1)))));updateVisualization(v3,p14,true,"black",0,(v17+"_succ1"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
 }v19=funCheckIfNodeInRange(v17, p14);
 print(("In Range: "+v19));if((funminPred(v17)==null)){{
 print("min pred is null");if((id(p14)<id(this))){{
 v16=this.TRUE;
-if((funinteger(sub_str(v15, (v17+1), (v17+2)))==1)){{
+if((funinteger(sub_str(v15, v17, (v17+1)))==1)){{
 updateVisualization(v3,p14,true,"black",0,(v17+"_pred1"));
 updateVisualization(v4,p14,true,"black",0,v15);
 print(length(copyEdgeArrayToNodeArray(v4,1)));}
@@ -287,7 +287,7 @@ v19=this.FALSE;
 }if((funmaxSucc(v17)==null)){{
 print("max succ is null");if((id(p14)>id(this))){{
 v16=this.TRUE;
-if((funinteger(sub_str(v15, (v17+1), (v17+2)))==1)){{
+if((funinteger(sub_str(v15, v17, (v17+1)))==1)){{
 updateVisualization(v3,p14,true,"black",0,(v17+"_succ1"));
 updateVisualization(v4,p14,true,"black",0,v15);
 print(length(copyEdgeArrayToNodeArray(v4,1)));}
@@ -303,7 +303,7 @@ v19=this.FALSE;
 }if(v19){{
 v16=this.TRUE;
 print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");if((id(p14)>id(this))){{
-if((funinteger(sub_str(v15, (v17+1), (v17+2)))==1)){{
+if((funinteger(sub_str(v15, v17, (v17+1)))==1)){{
 updateVisualization(v3,p14,true,"black",0,(v17+"_succ1"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
@@ -313,7 +313,7 @@ updateVisualization(v4,p14,true,"black",0,v15);
 }
 }}
 }if((id(p14)<id(this))){{
-if((funinteger(sub_str(v15, (v17+1), (v17+2)))==1)){{
+if((funinteger(sub_str(v15, v17, (v17+1)))==1)){{
 updateVisualization(v3,p14,true,"black",0,(v17+"_pred1"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
