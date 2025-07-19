@@ -404,12 +404,12 @@ succPredListclientNode{
             smallerThanPred = false;
             
 
-            if(id(v) > id(maxSucc)){
+            if(id(v) >= id(maxSucc)){
                 biggerThanSucc = true;
             }
 
         
-            if(id(v) < id(minPred)){
+            if(id(v) <= id(minPred)){
                 smallerThanPred = true;
             }
             
@@ -442,18 +442,16 @@ succPredListclientNode{
     }
 
     forwardNode (node forwardedNode) {
-        node next_node; 
-        string bitString;
-        bitString = bitfolge(id(forwardedNode));
+        node next_node;
         if (id(forwardedNode) < id(this)){
             next_node = globalMinPred();
             next_node -> linearize(forwardedNode);
         }
-        if (id(forwardedNode) > id(this)){
+        else if (id(forwardedNode) > id(this)){
             next_node = globalMaxSucc();
             next_node -> linearize(forwardedNode);
         } else {
-            print("Neiiiin");
+            print("gleicher Node???");
             /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
             /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
         }
