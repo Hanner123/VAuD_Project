@@ -313,6 +313,18 @@ succPredListclientNode{
         return minPred;
     }
 
+    globalMinPred node (){
+        int currentLevel;
+        node minPred;
+        minPred = minPred(0);
+        for(currentLevel=1; currentLevel<limit; currentLevel++){
+            if (id(minPred) > id(minPred(currentLevel))){
+                minPred = minPred(currentLevel);
+            }
+        }
+        return minPred;
+    }
+
     maxSucc node (int level){
         node succ0;
         node succ1;
@@ -327,6 +339,18 @@ succPredListclientNode{
             maxSucc = succ1;
         }
         print("max succ" + id(maxSucc));
+        return maxSucc;
+    }
+
+    globalMaxSucc node (){
+        int currentLevel;
+        node maxSucc;
+        maxSucc = maxSucc(0);
+        for(currentLevel=1; currentLevel<limit; currentLevel++){
+            if (id(maxSucc) < id(maxSucc(currentLevel))){
+                maxSucc = maxSucc(currentLevel);
+            }
+        }
         return maxSucc;
     }
 
@@ -403,13 +427,31 @@ succPredListclientNode{
         return inRange;
     }
 
-    forwardNode (node forwardedNode) {
-        node longestCommonPrefixNode;
+    forwardNode_old (node forwardedNode) {
+        node longestCommonPrefixNode; /*ich glaube das ergibt gar keinen sinn*/
         string bitString;
         bitString = bitfolge(id(forwardedNode));
         longestCommonPrefixNode = getLongestCommonPrefixNode(bitString);
         if(longestCommonPrefixNode != null){
             longestCommonPrefixNode -> linearize(forwardedNode);
+        } else {
+            print("Neiiiin");
+            /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
+            /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
+        }
+    }
+
+    forwardNode (node forwardedNode) {
+        node next_node; 
+        string bitString;
+        bitString = bitfolge(id(forwardedNode));
+        if (id(forwardedNode) < id(this)){
+            next_node = globalMinPred();
+            next_node -> linearize(forwardedNode);
+        }
+        if (id(forwardedNode) > id(this)){
+            next_node = globalMaxSucc();
+            next_node -> linearize(forwardedNode);
         } else {
             print("Neiiiin");
             /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
