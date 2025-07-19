@@ -63,14 +63,14 @@ succPredListclientNode{
         {
             tempArray <<<<;
             sortedLeftNeighbors(currentLevel); /*tempArray wird mit sorted LeftNeighbors der richtigen Ebene gefüllt*/
-            
+            int i;
             for(i=0; i< length(tempArray); i++){
                 tempArray[i] -> linearize(nearestRight[currentLevel]);
             }
 
             tempArray <<<<;
             sortedRightNeighbors(currentLevel); /*tempArray wird mit sorted RightNeighbors der richtigen Ebene gefüllt*/
-
+            int j;
             for(j= length(tempArray); j > 0; j--){
                 tempArray[j] -> linearize(nearestLeft[currentLevel]);
             } 
@@ -104,23 +104,36 @@ succPredListclientNode{
             
             if(checkIfNodeOnLevel(currentLevel, v) == true){  
                 bool inRange;
+                /* Falls Pred/succ is null: hinzufügen, auch wenn er nicht in der range ist */
                 bool pred_0_is_null;
                 pred_0_is_null = (succPredList[currentLevel + "_pred0"] == null);
+                bool pred_1_is_null;
+                pred_1_is_null = (succPredList[currentLevel + "_pred1"] == null);
+                bool succ_0_is_null;
+                succ_0_is_null = (succPredList[currentLevel + "_succ0"] == null);
+                bool succ_1_is_null;
+                succ_1_is_null = (succPredList[currentLevel + "_succ1"] == null);
                 bool bit_after_prefix_is_0;
                 bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel+1, currentLevel+2)) == 0);
-
                 if (pred_0_is_null && bit_after_prefix_is_0 && (id(v) < id(this)) ){
+                    print("pred_0 is null, v wird pred_0");
                     succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                     neighbors[vBit] = v;
                 }
-                if (pred_1_is_null && bit_after_prefix_is_1 && (id(v) < id(this)) ){
-
+                if (pred_1_is_null && (!bit_after_prefix_is_0) && (id(v) < id(this)) ){
+                    print("pred_1 is null, v wird pred_1");
+                    succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
+                    neighbors[vBit] = v;
                 }
                 if (succ_0_is_null && bit_after_prefix_is_0 && (id(v) > id(this)) ){
-
+                    print("succ_0 is null, v wird succ_0");
+                    succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ, hier auch Neighbors hinzufügen!*/
+                    neighbors[vBit] = v;
                 }
-                if (succ_1_is_null && bit_after_prefix_is_1 && (id(v) > id(this)) ){
-
+                if (succ_1_is_null && (!bit_after_prefix_is_0) && (id(v) > id(this)) ){
+                    print("succ_1 is null, v wird succ_1");
+                    succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ, hier auch Neighbors hinzufügen!*/
+                    neighbors[vBit] = v;
                 }
                 /* alle anderen */
 
@@ -274,6 +287,7 @@ succPredListclientNode{
             else {
                 bits = "0" + bits;
             }
+            res = res/2;
         }
         return bits;
     }
