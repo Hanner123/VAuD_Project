@@ -43,21 +43,20 @@ succPredListclientNode{
             print(length(tempArray));
 
             int i;
-            for(i=0; i< length(tempArray)-1; i++){
-                tempArray[i] -> linearize(tempArray[i+1]);
+            for(i=length(tempArray)-1; i > 1; i--){
+                tempArray[i] -> linearize(tempArray[i-1]);
             }
-            tempArray[i] -> linearize(this); 
+            tempArray[i-1] -> linearize(this); 
             nearestLeft[currentLevel] = tempArray[i];
 
             tempArray <<<<;
             sortedRightNeighbors(currentLevel); /*tempArray wird mit sorted RightNeighbors der richtigen Ebene gefüllt*/
 
             int j;
-            for(j= length(tempArray); j > 1; j--){
-                tempArray[j] -> linearize(tempArray[j-1]);
+            for(j= 0; j < length(tempArray)-1; j++){
+                tempArray[j] -> linearize(tempArray[j+1]);
             } 
-                
-            tempArray[j] -> linearize(this);
+            tempArray[j+1] -> linearize(this);
             nearestRight[currentLevel] = tempArray[j];
         }
         /* Für jeden i stellt u periodisch alle Knoten aus Ni(u) vor */
@@ -74,7 +73,7 @@ succPredListclientNode{
             tempArray <<<<;
             sortedRightNeighbors(currentLevel); /*tempArray wird mit sorted RightNeighbors der richtigen Ebene gefüllt*/
             int j;
-            for(j= length(tempArray); j > 0; j--){
+            for(j=0; j< length(tempArray); j++){
                 tempArray[j] -> linearize(nearestLeft[currentLevel]);
             } 
             tempArray <<<<;
