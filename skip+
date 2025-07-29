@@ -10,9 +10,9 @@ succPredListclientNode{
 
     init() {
         bitString= bitfolge(id(this));
-        print("Meine ID ist " + id(this));
+        /*print("Meine ID ist " + id(this));
         print("Meine Bitfolge ist " + bitString);
-        print("erstes Bit: " + sub_str(bitString, 0, 1));
+        print("erstes Bit: " + sub_str(bitString, 0, 1));*/
         int currentLevel;
         for(currentLevel = 0; currentLevel < limit; currentLevel++) {
             succPredList[currentLevel + "_succ0"] = null;
@@ -26,28 +26,29 @@ succPredListclientNode{
     timeout() {
         /* ToDo: Wir müssen hier auch noch die Präfixübereinstimmung hier überall mit einbauen */
 
-        print("timeout");
+        /*print("timeout");*/
         /* Regel 1a (linearisieren) */
         
         node[] nearestLeft;
         node[] nearestRight;
 
-        print(length(neighbors));
+        /*print(length(neighbors));*/
 
         tempArray <<<<;
         int currentLevel;
         for(currentLevel=0; currentLevel<limit; currentLevel++)
         {
             sortedLeftNeighbors(currentLevel); /*tempArray wird mit sorted LeftNeighbors der richtigen Ebene gefüllt*/
-            print("Laenge:");
-            print(length(tempArray));
+            /*print("Laenge:");*/
+            /*print(length(tempArray));*/
 
             int i;
             for(i=length(tempArray)-1; i > 1; i--){
                 tempArray[i] -> linearize(tempArray[i-1]);
+                /*tempArray[i] -> linearize(this);*/
             }
             tempArray[i-1] -> linearize(this); 
-            nearestLeft[currentLevel] = tempArray[i];
+            nearestLeft[currentLevel] = tempArray[0];
 
             tempArray <<<<;
             sortedRightNeighbors(currentLevel); /*tempArray wird mit sorted RightNeighbors der richtigen Ebene gefüllt*/
@@ -55,9 +56,10 @@ succPredListclientNode{
             int j;
             for(j= 0; j < length(tempArray)-1; j++){
                 tempArray[j] -> linearize(tempArray[j+1]);
+                /*tempArray[j] -> linearize(this);*/
             } 
             tempArray[j+1] -> linearize(this);
-            nearestRight[currentLevel] = tempArray[j];
+            nearestRight[currentLevel] = tempArray[length(tempArray)-1];
         }
         /* Für jeden i stellt u periodisch alle Knoten aus Ni(u) vor */
         /* Regel 1b */
@@ -82,15 +84,17 @@ succPredListclientNode{
         /* Hier rufen wir systematisch das linearize der nachbar knoten auf und stellen uns somit bei den Nachbarn vor */
     }
     linearize(node v){
-        print("linearize");
-        print(id(v));
+        /*print("linearize");
+        print(id(v));*/
         /* Regel 2 (überbrücken) */
         /* Hier erhalten wir die Vorgestellten Knoten und aktualisiern unsere Nachbarn / succPredList */
 
         /** 1. Aktualisiere Ranges und Nachbarschaft für jedes Level i */
         /** 2. Jeder Knoten w, der nun nicht mehr im range liegt -> delegieren (linearize bei anderem Knoten) zu Knoten mit größter Präfixübereinstimmung*/
         
-
+       /* BREAKPOINT
+        print(id(this));
+        print(id(v)); */
         string vBit;
         vBit = bitfolge(id(v));
 
@@ -100,6 +104,16 @@ succPredListclientNode{
         int currentLevel = 0;
 
         [string, node] globalNewNeighbors;  /*[bitstring, node]*/
+
+        if(v == null){
+            print("Null Node linearized");
+            return;
+        }
+
+        if(v == this){
+            print("Self edge");
+            return;
+        }
 
         for(currentLevel = 0; currentLevel<limit; currentLevel++){
             /* if prefix is the same!!!*/
@@ -118,46 +132,46 @@ succPredListclientNode{
                 bool bit_after_prefix_is_0;
                 bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel, currentLevel+1)) == 0);
                 if (pred_0_is_null && bit_after_prefix_is_0 && (id(v) < id(this)) ){
-                    print("pred_0 is null, v wird pred_0");
+                    /*print("pred_0 is null, v wird pred_0");*/
                     succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                     neighbors[vBit] = v;
                 }
                 if (pred_1_is_null && (!bit_after_prefix_is_0) && (id(v) < id(this)) ){
-                    print("pred_1 is null, v wird pred_1");
+                    /*print("pred_1 is null, v wird pred_1");*/
                     succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                     neighbors[vBit] = v;
                 }
                 if (succ_0_is_null && bit_after_prefix_is_0 && (id(v) > id(this)) ){
-                    print("succ_0 is null, v wird succ_0");
+                    /*print("succ_0 is null, v wird succ_0");*/
                     succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ, hier auch Neighbors hinzufügen!*/
                     neighbors[vBit] = v;
                 }
                 if (succ_1_is_null && (!bit_after_prefix_is_0) && (id(v) > id(this)) ){
-                    print("!!!!succ_1 is null, v wird succ_1!!!!");
-                    print("Bit after prefix is: " + integer(sub_str(vBit, currentLevel, currentLevel+1)));
+                    /*print("!!!!succ_1 is null, v wird succ_1!!!!");*/
+                    /*print("Bit after prefix is: " + integer(sub_str(vBit, currentLevel, currentLevel+1)));*/
                     succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ, hier auch Neighbors hinzufügen!*/
                     neighbors[vBit] = v;
                 }
                 /* alle anderen */
 
                 inRange = CheckIfNodeInRange(currentLevel, v);
-                print("In Range: " + inRange);
+                /*print("In Range: " + inRange);*/
                 if(minPred(currentLevel)==null){
-                    print("min pred is null");
+                    /*print("min pred is null");*/
                     /*schaue ob es ein pred sein kann (muss kleiner sein als this)*/
                     if (id(v) < id(this)){
                         vUsed = true;
                         if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                             neighbors[vBit] = v;
-                            print(length(neighbors));
+                            /*print(length(neighbors));*/
                         }
                         else{
                             succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
                             neighbors[vBit] = v;
-                            print(length(neighbors));
+                            /*print(length(neighbors));*/
                         }
-                        print("pred aktualisieren");
+                        /*print("pred aktualisieren");*/
                     }
                     else{
                         /*wenn nein: KP*/
@@ -166,21 +180,21 @@ succPredListclientNode{
                     
                 }
                 if(maxSucc(currentLevel)==null){
-                    print("max succ is null");
+                    /*print("max succ is null");*/
                     /*schaue ob es ein succ sein kann (muss größer sein als this)*/
                     if (id(v) > id(this)){
                         vUsed = true;
                         if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
                             neighbors[vBit] = v;
-                            print(length(neighbors));
+                            /*print(length(neighbors));*/
                         }
                         else{
                             succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
                             neighbors[vBit] = v;
-                            print(length(neighbors));
+                            /*print(length(neighbors));*/
                         }
-                        print("succ aktualisieren");
+                        /*print("succ aktualisieren");*/
                     }
                     else{
                         inRange = false;
@@ -190,7 +204,7 @@ succPredListclientNode{
 
                 if(inRange){
                     vUsed = true;
-                    print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");
+                    /*print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");*/
                     /*Nicht mehr gebrauchte Knoten weiterleiten*/
                     if (id(v) > id(this)){
                         if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
@@ -227,13 +241,19 @@ succPredListclientNode{
             }
 
         }
+
+        node[] toBeforwardedNodes;
+        int numberOfNodes;
+        numberOfNodes = -1;
         
         /*Alle nachbarkknoten weiterleiten die wir oben rauslöschen */
         for (string bitString : node neighbor : neighbors){
 
             if(globalNewNeighbors[bitString] == null){
                 /* Knoten wird nicht mehr gebraucht -> weiterleiten*/
-                forwardNode(neighbor);
+                /* Wir arbeiten mit neigbor -> wir müssen neigbors erst aktualisieren*/
+                numberOfNodes++;
+                toBeforwardedNodes[numberOfNodes] = neighbor;
             }
         }
 
@@ -242,17 +262,21 @@ succPredListclientNode{
             neighbors[bitString] = neighbor;
         }
 
+        for (node oldNeighbor : toBeforwardedNodes){ /*alte nachbarn weiterleiten*/
+            forwardNode_old(oldNeighbor);
+        }
+
         if(!vUsed){
             /* Weiterleiten von v */
-            forwardNode(v);
+            forwardNode_old(v);
         }
             
     }
     
 
     entry(node C) {
-        print("Entry: linearize");
-        print(id(C));
+        /*print("Entry: linearize");*/
+        /*print(id(C));*/
         linearize(C);
     }
 
@@ -308,7 +332,7 @@ succPredListclientNode{
         } else {
             minPred = pred1;
         }
-        print("min pred" + id(minPred));
+        /*print("min pred" + id(minPred));*/
         return minPred;
     }
 
@@ -337,7 +361,7 @@ succPredListclientNode{
         } else {
             maxSucc = succ1;
         }
-        print("max succ" + id(maxSucc));
+        /*print("max succ" + id(maxSucc));*/
         return maxSucc;
     }
 
@@ -357,7 +381,7 @@ succPredListclientNode{
         int i;
         int commonLength; 
         commonLength= 0;
-        print(limit);
+        /*print(limit);*/
 
         for(i = 0; i < limit; i++){
             if(sub_str(bit1, i, i+1) == sub_str(bit2, i, i+1)){
@@ -435,6 +459,8 @@ succPredListclientNode{
             longestCommonPrefixNode -> linearize(forwardedNode);
         } else {
             print("Neiiiin");
+            /*Fallback */
+            this -> linearize(forwardedNode);
             /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
             /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
         }
@@ -450,7 +476,8 @@ succPredListclientNode{
             next_node = globalMaxSucc();
             next_node -> linearize(forwardedNode);
         } else {
-            print("gleicher Node???");
+            /** TODo wir kommen in diesen fall -> Ist das schlimm? */
+            /*print("gleicher Node???");*/
             /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
             /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
         }
@@ -463,8 +490,8 @@ succPredListclientNode{
         for (string neighborBit : node neighbor : neighbors){
             if ((checkIfNodeOnLevel(currentLevel, neighbor))&&(id(neighbor) < id(this))){ /*collect smaller nodes*/
                 tempArray[i] = neighbor;
+                i = i+1;
             }
-            i = i+1;
         }
         bubbleSort();
         return;
@@ -477,8 +504,8 @@ succPredListclientNode{
         for (string neighborBit : node neighbor : neighbors){
             if ((checkIfNodeOnLevel(currentLevel, neighbor))&&(id(neighbor) > id(this))){ /*collect bigger nodes on same level*/
                 tempArray[i] = neighbor;
+                i = i+1;
             }
-            i = i+1;
         }
         bubbleSort();
         return;
