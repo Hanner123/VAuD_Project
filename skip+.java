@@ -1,4 +1,4 @@
-// C:\Users\joshu\Repositories\VAuD_Project\skip+
+// VAuD_Project/skip+
 import java.util.AbstractMap.SimpleEntry;
 import simulator.NodeGenerator;
 import simulator.Node;
@@ -306,32 +306,9 @@ updateVisualization(v4,p14,true,"black",0,v15);
 updateVisualization(v3,p14,true,"black",0,(v16+"_succ1"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
-}v18=funCheckIfNodeInRange(v16, p14);
-if((funminPred(v16)==null)){{
-if((id(p14)<id(this))){{
-if((funinteger(sub_str(v15, v16, (v16+1)))==1)){{
-updateVisualization(v3,p14,true,"black",0,(v16+"_pred1"));
-updateVisualization(v4,p14,true,"black",0,v15);
-}
 } else {{
-updateVisualization(v3,p14,true,"black",0,(v16+"_pred0"));
-updateVisualization(v4,p14,true,"black",0,v15);
-}
-}}
-}}
-}if((funmaxSucc(v16)==null)){{
-if((id(p14)>id(this))){{
-if((funinteger(sub_str(v15, v16, (v16+1)))==1)){{
-updateVisualization(v3,p14,true,"black",0,(v16+"_succ1"));
-updateVisualization(v4,p14,true,"black",0,v15);
-}
-} else {{
-updateVisualization(v3,p14,true,"black",0,(v16+"_succ0"));
-updateVisualization(v4,p14,true,"black",0,v15);
-}
-}}
-}}
-}if(v18){{
+v18=funCheckIfNodeInRange(v16, p14);
+if(v18){{
 if((id(p14)>id(this))){{
 if((funinteger(sub_str(v15, v16, (v16+1)))==1)){{
 updateVisualization(v3,p14,true,"black",0,(v16+"_succ1"));
@@ -351,6 +328,7 @@ updateVisualization(v4,p14,true,"black",0,v15);
 updateVisualization(v3,p14,true,"black",0,(v16+"_pred0"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
+}}
 }}
 }}
 }for(Entry<?,?> ev4:v4.entrySet()){
@@ -436,9 +414,9 @@ simulator.Node v46 = null;
 v45=(getArrayIndex(v3,null,(p44+"_pred0"))!=null?((Edge)(getArrayIndex(v3,null,(p44+"_pred0")))).node:null);
 v46=(getArrayIndex(v3,null,(p44+"_pred1"))!=null?((Edge)(getArrayIndex(v3,null,(p44+"_pred1")))).node:null);
 if(((v45==null)&&(v46!=null))){{
-{if(this.TRUE)return v46;}}
+print("pred0 sollte nicht null sein");{if(this.TRUE)return v46;}}
 } else {if(((v45!=null)&&(v46==null))){{
-{if(this.TRUE)return v45;}}
+print("pred1 sollte nicht null sein");{if(this.TRUE)return v45;}}
 }}simulator.Node v47 = null;
 if((id(v45)<id(v46))){{
 v47=v45;
