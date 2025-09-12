@@ -1,7 +1,7 @@
 succPredListclientNode{
     int limit = 5;
     string bitString;
-    [string, node] succPredList;
+    [string, node] succPredList; /* [level_succ/predBit, node] */
     [string, node] neighbors;  /*[bitstring, node]*/
     node[] tempArray;
 
@@ -97,13 +97,13 @@ succPredListclientNode{
         print(id(v)); */
         string vBit;
         vBit = bitfolge(id(v));
-
         /*bool vUsed;
         vUsed = false;*/
 
         int currentLevel = 0;
 
         [string, node] globalNewNeighbors;  /*[bitstring, node]*/
+        globalNewNeighbors <<<<;
 
         if(v == null){
             print("Null Node linearized");
@@ -154,7 +154,7 @@ succPredListclientNode{
                 }
                 /* alle anderen */
 
-                inRange = CheckIfNodeInRange(currentLevel, v);
+                inRange = CheckIfNodeInRange(currentLevel, v); /* Weiß schon, ob Node in Range aufgenommen wird*/ 
                 /*print("In Range: " + inRange);*/
                 if(minPred(currentLevel)==null){
                     /*print("min pred is null");*/
@@ -173,11 +173,6 @@ succPredListclientNode{
                         }
                         /*print("pred aktualisieren");*/
                     }
-                    else{
-                        /*wenn nein: KP*/
-                        inRange = false;
-                    }
-                    
                 }
                 if(maxSucc(currentLevel)==null){
                     /*print("max succ is null");*/
@@ -195,9 +190,6 @@ succPredListclientNode{
                             /*print(length(neighbors));*/
                         }
                         /*print("succ aktualisieren");*/
-                    }
-                    else{
-                        inRange = false;
                     }
                 }
 
@@ -441,10 +433,10 @@ succPredListclientNode{
         else if ((minPred == null) && (maxSucc == null)){
             inRange = true;
         }
-        else if ((minPred == null) && (maxSucc != null) && (id(v) < id(maxSucc))){
+        else if ((minPred == null) && (maxSucc != null) && (id(v) <= id(maxSucc))){
             inRange = true;
         }
-        else if ((minPred != null) && (maxSucc == null) && (id(v) > id(minPred))){
+        else if ((minPred != null) && (maxSucc == null) && (id(v) >= id(minPred))){
             inRange = true;
         }
         return inRange;

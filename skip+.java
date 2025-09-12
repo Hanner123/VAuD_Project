@@ -260,6 +260,7 @@ String v15 = "";
 v15=funbitfolge(id(p14));
 int v16 = 0;
 HashMap<String, simulator.Node> v17 = new HashMap<String, simulator.Node>();
+clearArray(v17,false);
 if((p14==null)){{
 print("Null Node linearized");{if(this.TRUE)return ;}}
 }if((p14==this)){{
@@ -305,9 +306,6 @@ updateVisualization(v3,p14,true,"black",0,(v16+"_pred0"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
 }}
-} else {{
-v18=this.FALSE;
-}
 }}
 }if((funmaxSucc(v16)==null)){{
 if((id(p14)>id(this))){{
@@ -320,9 +318,6 @@ updateVisualization(v3,p14,true,"black",0,(v16+"_succ0"));
 updateVisualization(v4,p14,true,"black",0,v15);
 }
 }}
-} else {{
-v18=this.FALSE;
-}
 }}
 }if(v18){{
 if((id(p14)>id(this))){{
@@ -529,10 +524,10 @@ v72=this.TRUE;
 } else {if(((v68==null)&&(v69==null))){{
 v70=this.TRUE;
 }
-} else {if((((v68==null)&&(v69!=null))&&(id(p67)<id(v69)))){{
+} else {if((((v68==null)&&(v69!=null))&&(id(p67)<=id(v69)))){{
 v70=this.TRUE;
 }
-} else {if((((v68!=null)&&(v69==null))&&(id(p67)>id(v68)))){{
+} else {if((((v68!=null)&&(v69==null))&&(id(p67)>=id(v68)))){{
 v70=this.TRUE;
 }
 }}}}{if(this.TRUE)return v70;}}
