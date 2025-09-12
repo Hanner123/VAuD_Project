@@ -47,7 +47,7 @@ succPredListclientNode{
                 tempArray[i] -> linearize(tempArray[i-1]);
                 /*tempArray[i] -> linearize(this);*/
             }
-            tempArray[i-1] -> linearize(this); 
+            tempArray[0] -> linearize(this); 
             nearestLeft[currentLevel] = tempArray[0];
 
             tempArray <<<<;
@@ -58,7 +58,7 @@ succPredListclientNode{
                 tempArray[j] -> linearize(tempArray[j+1]);
                 /*tempArray[j] -> linearize(this);*/
             } 
-            tempArray[j+1] -> linearize(this);
+            tempArray[length(tempArray)-1] -> linearize(this);
             nearestRight[currentLevel] = tempArray[length(tempArray)-1];
         }
         /* Für jeden i stellt u periodisch alle Knoten aus Ni(u) vor */
@@ -98,8 +98,8 @@ succPredListclientNode{
         string vBit;
         vBit = bitfolge(id(v));
 
-        bool vUsed;
-        vUsed = false;
+        /*bool vUsed;
+        vUsed = false;*/
 
         int currentLevel = 0;
 
@@ -160,7 +160,7 @@ succPredListclientNode{
                     /*print("min pred is null");*/
                     /*schaue ob es ein pred sein kann (muss kleiner sein als this)*/
                     if (id(v) < id(this)){
-                        vUsed = true;
+                        /*vUsed = true;*/
                         if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                             neighbors[vBit] = v;
@@ -183,7 +183,7 @@ succPredListclientNode{
                     /*print("max succ is null");*/
                     /*schaue ob es ein succ sein kann (muss größer sein als this)*/
                     if (id(v) > id(this)){
-                        vUsed = true;
+                        /*vUsed = true;*/
                         if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
                             succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
                             neighbors[vBit] = v;
@@ -203,7 +203,7 @@ succPredListclientNode{
 
 
                 if(inRange){
-                    vUsed = true;
+                    /*vUsed = true;*/
                     /*print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");*/
                     /*Nicht mehr gebrauchte Knoten weiterleiten*/
                     if (id(v) > id(this)){
@@ -266,11 +266,11 @@ succPredListclientNode{
             forwardNode_old(oldNeighbor);
         }
 
-        if(!vUsed){
-            /* Weiterleiten von v */
+       /* if(!vUsed){
+            Weiterleiten von v
             forwardNode_old(v);
         }
-            
+         */   
     }
     
 
@@ -393,16 +393,16 @@ succPredListclientNode{
         return commonLength;
     }
 
-    getLongestCommonPrefixNode node (string wBit){
+    getLongestCommonPrefixNode node (string bitString){
         int longestCommonBits;
         node nextNode;
                 
         longestCommonBits = -1;
         nextNode = null;
         for (string neighborBit : node neighbor : neighbors){
-            if(wBit != neighborBit){
+            if(bitString != neighborBit){
                 int commonBits;
-                commonBits = longestCommonPrefix(wBit, neighborBit);
+                commonBits = longestCommonPrefix(bitString, neighborBit);
                 if(commonBits > longestCommonBits) {
                     longestCommonBits = commonBits;
                     nextNode = neighbor;
@@ -460,7 +460,7 @@ succPredListclientNode{
         } else {
             print("Neiiiin");
             /*Fallback */
-            this -> linearize(forwardedNode);
+            this -> linearize(forwardedNode); /* To be deleted */
             /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
             /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
         }
