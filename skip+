@@ -214,7 +214,7 @@ succPredListclientNode{
                     }
                 }
                 
-
+                
                 for (string bitString : node neighbor : neighbors){
 
                     inRange = CheckIfNodeInRange(currentLevel, neighbor);
