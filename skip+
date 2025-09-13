@@ -28,7 +28,6 @@ succPredListclientNode{
 
         /*print("timeout");*/
         /* Regel 1a (linearisieren) */
-        
         node[] nearestLeft;
         node[] nearestRight;
 
@@ -41,7 +40,6 @@ succPredListclientNode{
             sortedLeftNeighbors(currentLevel); /*tempArray wird mit sorted LeftNeighbors der richtigen Ebene gefüllt*/
             /*print("Laenge:");*/
             /*print(length(tempArray));*/
-            print(length(tempArray));
             int i;
             for(i=length(tempArray)-1; i > 1; i--){
                 tempArray[i] -> linearize(tempArray[i-1]);
@@ -111,13 +109,10 @@ succPredListclientNode{
         print(id(v)); */
         string vBit;
         vBit = bitfolge(id(v));
-        /*bool vUsed;
-        vUsed = false;*/
 
         int currentLevel = 0;
 
         [string, node] globalNewNeighbors;  /*[bitstring, node]*/
-        globalNewNeighbors <<<<;
 
         if(v == null){
             print("Null Node linearized");
@@ -134,95 +129,65 @@ succPredListclientNode{
             
             if(checkIfNodeOnLevel(currentLevel, v) == true){  
                 bool inRange;
-                /* Falls Pred/succ is null: hinzufügen, auch wenn er nicht in der range ist */
-                
-                bool pred_0_is_null;
-                pred_0_is_null = (succPredList[currentLevel + "_pred0"] == null);
-                bool pred_1_is_null;
-                pred_1_is_null = (succPredList[currentLevel + "_pred1"] == null);
-                bool succ_0_is_null;
-                succ_0_is_null = (succPredList[currentLevel + "_succ0"] == null);
-                bool succ_1_is_null;
-                succ_1_is_null = (succPredList[currentLevel + "_succ1"] == null);
-                bool bit_after_prefix_is_0;
-                bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel, currentLevel+1)) == 0);
+                inRange = CheckIfNodeInRange(currentLevel, v); /* Weiß schon, ob Node in Range aufgenommen wird*/ 
+
+                bool pred_0_is_null = (succPredList[currentLevel + "_pred0"] == null);
+                bool pred_1_is_null = (succPredList[currentLevel + "_pred1"] == null);
+                bool succ_0_is_null = (succPredList[currentLevel + "_succ0"] == null);
+                bool succ_1_is_null = (succPredList[currentLevel + "_succ1"] == null);
+                bool bit_after_prefix_is_0 = (integer(sub_str(vBit, currentLevel, currentLevel+1)) == 0);
+
                 if (pred_0_is_null && bit_after_prefix_is_0 && (id(v) < id(this)) ){
                     succPredList[currentLevel + "_pred0"] = v;
                     neighbors[vBit] = v;
                 }
-                if (pred_1_is_null && (!bit_after_prefix_is_0) && (id(v) < id(this)) ){
+                else if (pred_1_is_null && (!bit_after_prefix_is_0) && (id(v) < id(this)) ){
                     succPredList[currentLevel + "_pred1"] = v;
                     neighbors[vBit] = v;
                 }
-                if (succ_0_is_null && bit_after_prefix_is_0 && (id(v) > id(this)) ){
+                else if (succ_0_is_null && bit_after_prefix_is_0 && (id(v) > id(this)) ){
                     succPredList[currentLevel + "_succ0"] = v;
                     neighbors[vBit] = v;
                 }
-                if (succ_1_is_null && (!bit_after_prefix_is_0) && (id(v) > id(this)) ){
+                else if (succ_1_is_null && (!bit_after_prefix_is_0) && (id(v) > id(this)) ){
                     succPredList[currentLevel + "_succ1"] = v;
                     neighbors[vBit] = v;
                 }
-                /*eig unnötig, da wenn minPred/maxSucc null ist oben in den Fällen schon die predsucc list angepasst wurde.
-                if(minPred(currentLevel)==null){
-                    if (id(v) < id(this)){
-                        if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){
-                            succPredList[currentLevel + "_pred1"] = v;
-                            neighbors[vBit] = v;
-                        }
-                        else{
-                            succPredList[currentLevel + "_pred0"] = v;
-                            neighbors[vBit] = v;
-                        }
-                    }
-                }
-                if(maxSucc(currentLevel)==null){
-                    if (id(v) > id(this)){
-                        if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){
-                            succPredList[currentLevel + "_succ1"] = v;
-                            neighbors[vBit] = v;
-                        }
-                        else{
-                            succPredList[currentLevel + "_succ0"] = v;
-                            neighbors[vBit] = v;
-                        }
-                    }
-                }
-                */
-                else{
-                    inRange = CheckIfNodeInRange(currentLevel, v); /* Weiß schon, ob Node in Range aufgenommen wird*/ 
-                    if(inRange){
+                else if (inRange){
                         /*vUsed = true;*/
                         /*print("else - ranges und nachbarschaften aktualisieren (succ, pred und nachbarschaftsliste))");*/
                         /*Nicht mehr gebrauchte Knoten weiterleiten*/
                         if (id(v) > id(this)){
                             if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
-                            /*  if((succPredList[currentLevel + "_succ1"] != null) && (id(v) < id(succPredList[currentLevel + "_succ1"]))){*/
+                                if((id(v) < id(succPredList[currentLevel + "_succ1"]))){
+                                    print("better succ_1 found: " + id(v) + " is new succ1 instead of " + id(succPredList[currentLevel + "_succ1"]));
                                     succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
                                     neighbors[vBit] = v;
-                                /*}*/
+                                }
                             }
                             else{
-                                /*if((succPredList[currentLevel + "_succ0"] != null) && (id(v) < id(succPredList[currentLevel + "_succ0"]))){*/
+                                if(id(v) < id(succPredList[currentLevel + "_succ0"])){
+                                    print("better succ_0 found: " + id(v) + " is new succ0 instead of " + id(succPredList[currentLevel + "_succ0"]));
                                     succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
                                     neighbors[vBit] = v;
-                                /*}*/
+                                }
                             }
                         }
                         if (id(v) < id(this)){
                             if(integer(sub_str(vBit, currentLevel, currentLevel+1)) == 1){/*ist das i+1. bit eine 0 oder 1*/
-                            /* if((succPredList[currentLevel + "_pred1"] != null) && (id(v) > id(succPredList[currentLevel + "_pred1"]))){*/
+                                if((id(v) > id(succPredList[currentLevel + "_pred1"]))){
+                                    print("better pred_1 found: " + id(v) + " is new pred_1 instead of " + id(succPredList[currentLevel + "_pred1"]));
                                     succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                                     neighbors[vBit] = v;
-                            /* }*/
+                                }
                             }
                             else{
-                                /*if((succPredList[currentLevel + "_pred0"] != null) && (id(v) > id(succPredList[currentLevel + "_pred0"]))){*/
+                                if((id(v) > id(succPredList[currentLevel + "_pred0"]))){
+                                    print("better pred_0 found: " + id(v) + " is new pred_0 instead of " + id(succPredList[currentLevel + "_pred0"]));
                                     succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
                                     neighbors[vBit] = v;
-                            /* }*/
+                                }
                             }
-                        }
-
                     }
                 }
                 
@@ -239,23 +204,23 @@ succPredListclientNode{
 
         }
 
+        /*Alle Nachbarkknoten weiterleiten die wir oben rauslöschen */
+
         node[] toBeforwardedNodes;
         int numberOfNodes;
-        numberOfNodes = -1;
-        
-        /*Alle nachbarkknoten weiterleiten die wir oben rauslöschen */
+        numberOfNodes = 0;
+
         for (string bitString : node neighbor : neighbors){
 
             if(globalNewNeighbors[bitString] == null){
-                /* Knoten wird nicht mehr gebraucht -> weiterleiten*/
-                /* Wir arbeiten mit neigbor -> wir müssen neigbors erst aktualisieren*/
-                numberOfNodes++;
                 toBeforwardedNodes[numberOfNodes] = neighbor;
+                print("to be forwarded: " + id(neighbor));
+                numberOfNodes++;
             }
         }
 
-        neighbors <<<<; /*neighbors empty machen*/
-        for (string bitString : node neighbor : globalNewNeighbors){ /*neighbor Liste überschreiben*/
+        neighbors <<<<; /*neighbors überschreiben*/
+        for (string bitString : node neighbor : globalNewNeighbors){ 
             neighbors[bitString] = neighbor;
         }
 
@@ -263,17 +228,10 @@ succPredListclientNode{
             forwardNode_old(oldNeighbor);
         }
 
-       /* if(!vUsed){
-            Weiterleiten von v
-            forwardNode_old(v);
-        }
-         */   
     }
     
 
     entry(node C) {
-        /*print("Entry: linearize");*/
-        /*print(id(C));*/
         linearize(C);
     }
 
@@ -324,16 +282,14 @@ succPredListclientNode{
         pred1 = succPredList[level + "_pred1"];  
         /* ToDo Hat es kaputt gemacht */
          if(pred0 == null && pred1 != null){
-            print("pred0 sollte nicht null sein, wobei, wird ja auch in anderen Fällen aufgerufen");
             return pred1;
         } else if (pred0 != null && pred1 == null){
-            print("pred1 sollte nicht null sein");
             return pred0;
         }
         
         node minPred;
         if(id(pred0) < id(pred1)){
-           minPred = pred0;
+            minPred = pred0;
         } else {
             minPred = pred1;
         }
@@ -366,7 +322,6 @@ succPredListclientNode{
         } else {
             maxSucc = succ1;
         }
-        /*print("max succ" + id(maxSucc));*/
         return maxSucc;
     }
 
@@ -414,6 +369,9 @@ succPredListclientNode{
                 }
             }
         }
+        if (nextNode == null){
+            print("nextNode is null");
+        }
         return nextNode;
     }
     
@@ -430,14 +388,13 @@ succPredListclientNode{
             biggerThanSucc = false;
             bool smallerThanPred;
             smallerThanPred = false;
-            
 
-            if(id(v) >= id(maxSucc)){
+            /*Wichtif: > und < da sonst der maxSucc nicht in range ist*/
+            if(id(v) > id(maxSucc)){
                 biggerThanSucc = true;
             }
-
         
-            if(id(v) <= id(minPred)){
+            if(id(v) < id(minPred)){
                 smallerThanPred = true;
             }
             
@@ -504,6 +461,12 @@ succPredListclientNode{
             }
         }
         bubbleSort();
+        /*
+        int j;
+        for (j = 0; j < length(tempArray); j++){ 
+            print("Sorted Left Neighbor:" + id(tempArray[j]) + " " + j);
+        }
+            */
         return;
     }
 
@@ -517,6 +480,12 @@ succPredListclientNode{
             }
         }
         bubbleSort();
+        /*
+        int j;
+        for (j = 0; j < length(tempArray); j++){ 
+            print("Sorted Right Neighbor:" + id(tempArray[j]) + " " + j);
+        }
+        */
         return;
     }
 
