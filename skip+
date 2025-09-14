@@ -140,18 +140,22 @@ succPredListclientNode{
                 if (pred_0_is_null && bit_after_prefix_is_0 && (id(v) < id(this)) ){
                     succPredList[currentLevel + "_pred0"] = v;
                     neighbors[vBit] = v;
+                    /*globalNewNeighbors[vBit] = v;*/
                 }
                 else if (pred_1_is_null && (!bit_after_prefix_is_0) && (id(v) < id(this)) ){
                     succPredList[currentLevel + "_pred1"] = v;
                     neighbors[vBit] = v;
+                    /*globalNewNeighbors[vBit] = v;*/
                 }
                 else if (succ_0_is_null && bit_after_prefix_is_0 && (id(v) > id(this)) ){
                     succPredList[currentLevel + "_succ0"] = v;
                     neighbors[vBit] = v;
+                    /*globalNewNeighbors[vBit] = v;*/
                 }
                 else if (succ_1_is_null && (!bit_after_prefix_is_0) && (id(v) > id(this)) ){
                     succPredList[currentLevel + "_succ1"] = v;
                     neighbors[vBit] = v;
+                    /*globalNewNeighbors[vBit] = v;*/
                 }
                 else if (inRange){
                         /*vUsed = true;*/
@@ -163,6 +167,7 @@ succPredListclientNode{
                                     print("better succ_1 found: " + id(v) + " is new succ1 instead of " + id(succPredList[currentLevel + "_succ1"]));
                                     succPredList[currentLevel + "_succ1"] = v;/*wenn ja: v ist neuer succ*/
                                     neighbors[vBit] = v;
+                                    /*globalNewNeighbors[vBit] = v;*/
                                 }
                             }
                             else{
@@ -170,6 +175,7 @@ succPredListclientNode{
                                     print("better succ_0 found: " + id(v) + " is new succ0 instead of " + id(succPredList[currentLevel + "_succ0"]));
                                     succPredList[currentLevel + "_succ0"] = v;/*wenn ja: v ist neuer succ*/
                                     neighbors[vBit] = v;
+                                    /*globalNewNeighbors[vBit] = v;*/
                                 }
                             }
                         }
@@ -179,6 +185,7 @@ succPredListclientNode{
                                     print("better pred_1 found: " + id(v) + " is new pred_1 instead of " + id(succPredList[currentLevel + "_pred1"]));
                                     succPredList[currentLevel + "_pred1"] = v;/*wenn ja: v ist neuer pred, hier auch Neighbors hinzufügen!*/
                                     neighbors[vBit] = v;
+                                    /*globalNewNeighbors[vBit] = v;*/
                                 }
                             }
                             else{
@@ -186,6 +193,7 @@ succPredListclientNode{
                                     print("better pred_0 found: " + id(v) + " is new pred_0 instead of " + id(succPredList[currentLevel + "_pred0"]));
                                     succPredList[currentLevel + "_pred0"] = v;/*wenn ja: v ist neuer pred*/
                                     neighbors[vBit] = v;
+                                    /*globalNewNeighbors[vBit] = v;*/
                                 }
                             }
                     }
@@ -195,8 +203,12 @@ succPredListclientNode{
                 for (string bitString : node neighbor : neighbors){
 
                     inRange = CheckIfNodeInRange(currentLevel, neighbor);
-                    
-                    if(inRange){
+
+                    if(neighbor == null){
+                        print("NEEEEIIIIINNNNN");
+                    }
+                    /* Dieses hier hat auch keine stabilisierung gebracht. Können auch später wieder auf inRange ändern */
+                    if(inRange || succPredList[currentLevel + "_pred0"] == neighbor || succPredList[currentLevel + "_pred1"] == neighbor || succPredList[currentLevel + "_succ0"] == neighbor || succPredList[currentLevel + "_succ1"] == neighbor){
                         globalNewNeighbors[bitString] = neighbor;
                     }
                 }
@@ -233,6 +245,18 @@ succPredListclientNode{
 
     entry(node C) {
         linearize(C);
+    }
+
+    search(int searchedId){
+        string bits;
+        bits = bitfolge(searchedId);
+        if(neighbors[bits] != null){
+            print("Found: " + neighbors[bits]);
+        } else {
+            node longestCommonPrefixNode;
+            longestCommonPrefixNode = getLongestCommonPrefixNode(bitString);
+            longestCommonPrefixNode -> search(searchedId);
+        }
     }
 
     integer int (string x){
@@ -280,21 +304,42 @@ succPredListclientNode{
 
         pred0 = succPredList[level + "_pred0"];
         pred1 = succPredList[level + "_pred1"];  
+
+        if (pred0 == null && pred1 == null) {
+            return null;
+        }
+        if (pred0 == null) {
+            return pred1;
+        }
+        if (pred1 == null) {
+            return pred0;
+        }
+
+        /* beide != null → nimm den mit kleinerer ID (weil kleinster Vorgänger) */
+        if (id(pred0) < id(pred1)) {
+            return pred0;
+        } else {
+            return pred1;
+        }
+
+
+
         /* ToDo Hat es kaputt gemacht */
+        /*
          if(pred0 == null && pred1 != null){
             return pred1;
         } else if (pred0 != null && pred1 == null){
             return pred0;
-        }
-        
+        } */
+        /* 
         node minPred;
         if(id(pred0) < id(pred1)){
             minPred = pred0;
         } else {
             minPred = pred1;
-        }
+        }*/
         /*print("min pred" + id(minPred));*/
-        return minPred;
+       /*  return minPred;*/
     }
 
     globalMinPred node (){
@@ -399,6 +444,12 @@ succPredListclientNode{
             }
             
             inRange = !(biggerThanSucc || smallerThanPred); 
+
+            if(inRange == false && id(v) == 1){
+               /*  print("v: " + id(v));
+                print("minPred: " + id(minPred));
+                print("maxSucc: " + id(maxSucc));*/
+            }
         }
         else if ((minPred == null) && (maxSucc == null)){
             inRange = true;
