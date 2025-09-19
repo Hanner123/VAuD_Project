@@ -370,8 +370,8 @@ simulator.Node i27=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5
 {
 v20=funCheckIfNodeInRange(v18, i27);
 if((i27==null)){{
-print("NEEEEIIIIINNNNN");}
-}if(((((v20||((getArrayIndex(v4,null,(v18+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred0")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred1")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ0")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ1")))).node:null)==i27))){{
+print("neighbor is null because we set it to null (forget node)");}
+}if((v20&&(i27!=null))){{
 setArrayIndex('=',v19,Arrays.asList(i26),i27,null,0);
 }
 }}
@@ -426,7 +426,7 @@ if((v3==this.TRUE)){{
 {if(this.TRUE)return ;}}
 }if(((getArrayIndex(v6,null,funbitfolge(id(p39)))!=null?((Edge)(getArrayIndex(v6,null,funbitfolge(id(p39))))).node:null)==p39)){{
 print((("Node "+id(p39))+" already forgotten"));{if(this.TRUE)return ;}}
-}print(("Forget Node "+id(p39)));updateVisualization(v6,p39,true,"blue",0,funbitfolge(id(p39)));
+}print(("Forget Node "+id(p39)));updateVisualization(v6,p39,true,"red",0,funbitfolge(id(p39)));
 int v40 = 0;
 for(v40=0;(v40<v1);v40=v40+1){{
 if(((getArrayIndex(v4,null,(v40+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred0")))).node:null)==p39)){{
@@ -658,7 +658,7 @@ if((p82==null)){{
 print("forwardedNode is null");}
 }}
 } else {{
-print("Neiiiin");{if (this!=null) this.send("linearize",false,p82);}
+print("Neiiiin - longestCommonPrefixNode is null");{if (this!=null) this.send("linearize",false,p82);}
 }
 }}
  catch (ArithmeticException e){ print("arithmetic exception in forwardNode_old: "+e.getMessage()); } return ;} long callCounterforwardNode;
