@@ -1,4 +1,4 @@
-// C:\Users\joshu\Repositories\VAuD_Project\skip+
+// VAuD_Project/skip+
 import java.util.AbstractMap.SimpleEntry;
 import simulator.NodeGenerator;
 import simulator.Node;
@@ -23,17 +23,21 @@ return null;
 public nodeTypesuccPredListclientNode (String name, boolean runSemisynchron){super(name,"succPredListclientNode",runSemisynchron);}
 int v1 = 5;
 String v2 = "";
-HashMap<String, Edge> v3 = new HashMap<String, Edge>();
+boolean v3 = this.FALSE;
 HashMap<String, Edge> v4 = new HashMap<String, Edge>();
-List<Edge> v5 = new ArrayList<Edge>();
+HashMap<String, Edge> v5 = new HashMap<String, Edge>();
+HashMap<String, Edge> v6 = new HashMap<String, Edge>();
+List<Edge> v7 = new ArrayList<Edge>();
 @SuppressWarnings("unchecked")
 public Entry<String, Object>[] getAttributes(){
 return new SimpleEntry[] {
 new SimpleEntry<String, Object>("limit",v1), 
 new SimpleEntry<String, Object>("bitString",v2), 
-new SimpleEntry<String, Object>("succPredList",v3), 
-new SimpleEntry<String, Object>("neighbors",v4), 
-new SimpleEntry<String, Object>("tempArray",v5)};}
+new SimpleEntry<String, Object>("deleted",v3), 
+new SimpleEntry<String, Object>("succPredList",v4), 
+new SimpleEntry<String, Object>("neighbors",v5), 
+new SimpleEntry<String, Object>("toBeDeleted",v6), 
+new SimpleEntry<String, Object>("tempArray",v7)};}
 @SuppressWarnings("unchecked")
 public Entry<String, Entry<String, String>[]>[] getFunctions(){
 List<Entry<String, Entry<String, String>[]>> attr = new LinkedList<Entry<String, Entry<String, String>[]>>();
@@ -45,6 +49,9 @@ attr.add(new SimpleEntry<String, Entry<String, String>[]>("entry",new SimpleEntr
 new SimpleEntry<String, String>("C", "simulator.Node")}));
 attr.add(new SimpleEntry<String, Entry<String, String>[]>("search",new SimpleEntry[] {
 new SimpleEntry<String, String>("searchedId", "int")}));
+attr.add(new SimpleEntry<String, Entry<String, String>[]>("forgetNode",new SimpleEntry[] {
+new SimpleEntry<String, String>("v", "simulator.Node")}));
+attr.add(new SimpleEntry<String, Entry<String, String>[]>("delete",new SimpleEntry[] {}));
 attr.add(new SimpleEntry<String, Entry<String, String>[]>("integer",new SimpleEntry[] {
 new SimpleEntry<String, String>("x", "String")}));
 attr.add(new SimpleEntry<String, Entry<String, String>[]>("checkIfNodeOnLevel",new SimpleEntry[] {
@@ -85,6 +92,8 @@ attr.add(new SimpleEntry<String, Long>("timeout",callCountertimeout));
 attr.add(new SimpleEntry<String, Long>("linearize",callCounterlinearize));
 attr.add(new SimpleEntry<String, Long>("entry",callCounterentry));
 attr.add(new SimpleEntry<String, Long>("search",callCountersearch));
+attr.add(new SimpleEntry<String, Long>("forgetNode",callCounterforgetNode));
+attr.add(new SimpleEntry<String, Long>("delete",callCounterdelete));
 attr.add(new SimpleEntry<String, Long>("integer",callCounterinteger));
 attr.add(new SimpleEntry<String, Long>("checkIfNodeOnLevel",callCountercheckIfNodeOnLevel));
 attr.add(new SimpleEntry<String, Long>("bitfolge",callCounterbitfolge));
@@ -128,6 +137,16 @@ print("entry returned");
 if (params[0].equals("search")){
 funsearch((int)params[2]);if ((boolean)params[1]){
 print("search returned");
+}
+}
+if (params[0].equals("forgetNode")){
+funforgetNode((simulator.Node)params[2]);if ((boolean)params[1]){
+print("forgetNode returned");
+}
+}
+if (params[0].equals("delete")){
+fundelete();if ((boolean)params[1]){
+print("delete returned");
 }
 }
 if (params[0].equals("integer")){
@@ -219,403 +238,472 @@ print("bubbleSort returned");
 long callCounterinit;
 protected void funinit() { callCounterinit++; try {
 v2=funbitfolge(id(this));
-int v6 = 0;
-for(v6=0;(v6<v1);v6=v6+1){{
-updateVisualization(v3,null,true,"black",0,(v6+"_succ0"));
-updateVisualization(v3,null,true,"black",0,(v6+"_succ1"));
-updateVisualization(v3,null,true,"black",0,(v6+"_pred0"));
-updateVisualization(v3,null,true,"black",0,(v6+"_pred1"));
+int v8 = 0;
+for(v8=0;(v8<v1);v8=v8+1){{
+updateVisualization(v4,null,true,"black",0,(v8+"_succ0"));
+updateVisualization(v4,null,true,"black",0,(v8+"_succ1"));
+updateVisualization(v4,null,true,"black",0,(v8+"_pred0"));
+updateVisualization(v4,null,true,"black",0,(v8+"_pred1"));
 }
 }}
  catch (ArithmeticException e){ print("arithmetic exception in init: "+e.getMessage()); } return ;} long callCountertimeout;
 protected void funtimeout() { callCountertimeout++; try {
-List<simulator.Node> v7 = new ArrayList<simulator.Node>();
-List<simulator.Node> v8 = new ArrayList<simulator.Node>();
-clearArray(v5,true);
-int v9 = 0;
-for(v9=0;(v9<v1);v9=v9+1){{
-funsortedLeftNeighbors(v9);int v10 = 0;
-for(v10=(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1);(v10>1);v10=v10-1){{
-{if ((getArrayIndex(v5,null,v10)!=null?((Edge)(getArrayIndex(v5,null,v10))).node:null)!=null) (getArrayIndex(v5,null,v10)!=null?((Edge)(getArrayIndex(v5,null,v10))).node:null).send("linearize",false,(getArrayIndex(v5,null,(v10-1))!=null?((Edge)(getArrayIndex(v5,null,(v10-1)))).node:null));}
-if(((getArrayIndex(v5,null,(v10-1))!=null?((Edge)(getArrayIndex(v5,null,(v10-1)))).node:null)==null)){{
-print(("tempArray[i-1] is null with i = "+v10));}
+List<simulator.Node> v9 = new ArrayList<simulator.Node>();
+List<simulator.Node> v10 = new ArrayList<simulator.Node>();
+clearArray(v7,true);
+int v11 = 0;
+if((v3==this.TRUE)){{
+{if(this.TRUE)return ;}}
+}for(v11=0;(v11<v1);v11=v11+1){{
+funsortedLeftNeighbors(v11);int v12 = 0;
+for(v12=(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1);(v12>1);v12=v12-1){{
+{if ((getArrayIndex(v7,null,v12)!=null?((Edge)(getArrayIndex(v7,null,v12))).node:null)!=null) (getArrayIndex(v7,null,v12)!=null?((Edge)(getArrayIndex(v7,null,v12))).node:null).send("linearize",false,(getArrayIndex(v7,null,(v12-1))!=null?((Edge)(getArrayIndex(v7,null,(v12-1)))).node:null));}
+if(((getArrayIndex(v7,null,(v12-1))!=null?((Edge)(getArrayIndex(v7,null,(v12-1)))).node:null)==null)){{
+print(("tempArray[i-1] is null with i = "+v12));}
 }}
-}if(((getArrayIndex(v5,null,0)!=null?((Edge)(getArrayIndex(v5,null,0))).node:null)!=null)){{
-{if ((getArrayIndex(v5,null,0)!=null?((Edge)(getArrayIndex(v5,null,0))).node:null)!=null) (getArrayIndex(v5,null,0)!=null?((Edge)(getArrayIndex(v5,null,0))).node:null).send("linearize",false,this);}
+}if(((getArrayIndex(v7,null,0)!=null?((Edge)(getArrayIndex(v7,null,0))).node:null)!=null)){{
+{if ((getArrayIndex(v7,null,0)!=null?((Edge)(getArrayIndex(v7,null,0))).node:null)!=null) (getArrayIndex(v7,null,0)!=null?((Edge)(getArrayIndex(v7,null,0))).node:null).send("linearize",false,this);}
 }
-}setArrayIndex('=',v7,Arrays.asList(v9),(getArrayIndex(v5,null,0)!=null?((Edge)(getArrayIndex(v5,null,0))).node:null),null,1);
-clearArray(v5,true);
-funsortedRightNeighbors(v9);int v11 = 0;
-for(v11=0;(v11<(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1));v11=v11+1){{
-{if ((getArrayIndex(v5,null,v11)!=null?((Edge)(getArrayIndex(v5,null,v11))).node:null)!=null) (getArrayIndex(v5,null,v11)!=null?((Edge)(getArrayIndex(v5,null,v11))).node:null).send("linearize",false,(getArrayIndex(v5,null,(v11+1))!=null?((Edge)(getArrayIndex(v5,null,(v11+1)))).node:null));}
-if(((getArrayIndex(v5,null,(v11+1))!=null?((Edge)(getArrayIndex(v5,null,(v11+1)))).node:null)==null)){{
-print(("tempArray[j+1] is null with j = "+v11));}
+}setArrayIndex('=',v9,Arrays.asList(v11),(getArrayIndex(v7,null,0)!=null?((Edge)(getArrayIndex(v7,null,0))).node:null),null,1);
+clearArray(v7,true);
+funsortedRightNeighbors(v11);int v13 = 0;
+for(v13=0;(v13<(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1));v13=v13+1){{
+{if ((getArrayIndex(v7,null,v13)!=null?((Edge)(getArrayIndex(v7,null,v13))).node:null)!=null) (getArrayIndex(v7,null,v13)!=null?((Edge)(getArrayIndex(v7,null,v13))).node:null).send("linearize",false,(getArrayIndex(v7,null,(v13+1))!=null?((Edge)(getArrayIndex(v7,null,(v13+1)))).node:null));}
+if(((getArrayIndex(v7,null,(v13+1))!=null?((Edge)(getArrayIndex(v7,null,(v13+1)))).node:null)==null)){{
+print(("tempArray[j+1] is null with j = "+v13));}
 }}
-}if(((getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1))!=null?((Edge)(getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1)))).node:null)!=null)){{
-{if ((getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1))!=null?((Edge)(getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1)))).node:null)!=null) (getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1))!=null?((Edge)(getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1)))).node:null).send("linearize",false,this);}
+}if(((getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1))!=null?((Edge)(getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1)))).node:null)!=null)){{
+{if ((getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1))!=null?((Edge)(getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1)))).node:null)!=null) (getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1))!=null?((Edge)(getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1)))).node:null).send("linearize",false,this);}
 }
-}setArrayIndex('=',v8,Arrays.asList(v9),(getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1))!=null?((Edge)(getArrayIndex(v5,null,(length((List<Node>)copyEdgeArrayToNodeArray(v5,1))-1)))).node:null),null,1);
+}setArrayIndex('=',v10,Arrays.asList(v11),(getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1))!=null?((Edge)(getArrayIndex(v7,null,(length((List<Node>)copyEdgeArrayToNodeArray(v7,1))-1)))).node:null),null,1);
 }
-}for(v9=0;(v9<v1);v9=v9+1){{
-clearArray(v5,true);
-funsortedLeftNeighbors(v9);int v12 = 0;
-for(v12=0;(v12<length((List<Node>)copyEdgeArrayToNodeArray(v5,1)));v12=v12+1){{
-if((getArrayIndex(v8,null,v9)!=null)){{
-{if ((getArrayIndex(v5,null,v12)!=null?((Edge)(getArrayIndex(v5,null,v12))).node:null)!=null) (getArrayIndex(v5,null,v12)!=null?((Edge)(getArrayIndex(v5,null,v12))).node:null).send("linearize",false,getArrayIndex(v8,null,v9));}
-}
-}}
-}clearArray(v5,true);
-funsortedRightNeighbors(v9);int v13 = 0;
-for(v13=0;(v13<length((List<Node>)copyEdgeArrayToNodeArray(v5,1)));v13=v13+1){{
-if((getArrayIndex(v7,null,v9)!=null)){{
-{if ((getArrayIndex(v5,null,v13)!=null?((Edge)(getArrayIndex(v5,null,v13))).node:null)!=null) (getArrayIndex(v5,null,v13)!=null?((Edge)(getArrayIndex(v5,null,v13))).node:null).send("linearize",false,getArrayIndex(v7,null,v9));}
+}for(v11=0;(v11<v1);v11=v11+1){{
+clearArray(v7,true);
+funsortedLeftNeighbors(v11);int v14 = 0;
+for(v14=0;(v14<length((List<Node>)copyEdgeArrayToNodeArray(v7,1)));v14=v14+1){{
+if((getArrayIndex(v10,null,v11)!=null)){{
+{if ((getArrayIndex(v7,null,v14)!=null?((Edge)(getArrayIndex(v7,null,v14))).node:null)!=null) (getArrayIndex(v7,null,v14)!=null?((Edge)(getArrayIndex(v7,null,v14))).node:null).send("linearize",false,getArrayIndex(v10,null,v11));}
 }
 }}
-}clearArray(v5,true);
+}clearArray(v7,true);
+funsortedRightNeighbors(v11);int v15 = 0;
+for(v15=0;(v15<length((List<Node>)copyEdgeArrayToNodeArray(v7,1)));v15=v15+1){{
+if((getArrayIndex(v9,null,v11)!=null)){{
+{if ((getArrayIndex(v7,null,v15)!=null?((Edge)(getArrayIndex(v7,null,v15))).node:null)!=null) (getArrayIndex(v7,null,v15)!=null?((Edge)(getArrayIndex(v7,null,v15))).node:null).send("linearize",false,getArrayIndex(v9,null,v11));}
+}
+}}
+}clearArray(v7,true);
 }
 }}
  catch (ArithmeticException e){ print("arithmetic exception in timeout: "+e.getMessage()); } return ;} long callCounterlinearize;
-protected void funlinearize(simulator.Node p14) { callCounterlinearize++; try {
-String v15 = "";
-v15=funbitfolge(id(p14));
-int v16 = 0;
-HashMap<String, simulator.Node> v17 = new HashMap<String, simulator.Node>();
-if((p14==null)){{
+protected void funlinearize(simulator.Node p16) { callCounterlinearize++; try {
+String v17 = "";
+v17=funbitfolge(id(p16));
+int v18 = 0;
+HashMap<String, simulator.Node> v19 = new HashMap<String, simulator.Node>();
+if((v3==this.TRUE)){{
+{if(this.TRUE)return ;}}
+}if(((getArrayIndex(v6,null,funbitfolge(id(p16)))!=null?((Edge)(getArrayIndex(v6,null,funbitfolge(id(p16))))).node:null)==p16)){{
+print((("Node "+id(p16))+" already forgotten"));{if(this.TRUE)return ;}}
+}if((p16==null)){{
 print("Null Node linearized");{if(this.TRUE)return ;}}
-}if((p14==this)){{
-print("Self edge");{if(this.TRUE)return ;}}
-}for(v16=0;(v16<v1);v16=v16+1){{
-if((funcheckIfNodeOnLevel(v16, p14)==this.TRUE)){{
-boolean v18 = false;
-v18=funCheckIfNodeInRange(v16, p14);
-boolean v19 = ((getArrayIndex(v3,null,(v16+"_pred0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred0")))).node:null)==null);
-boolean v20 = ((getArrayIndex(v3,null,(v16+"_pred1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred1")))).node:null)==null);
-boolean v21 = ((getArrayIndex(v3,null,(v16+"_succ0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ0")))).node:null)==null);
-boolean v22 = ((getArrayIndex(v3,null,(v16+"_succ1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ1")))).node:null)==null);
-boolean v23 = (funinteger(sub_str(v15, v16, (v16+1)))==0);
-if(((v19&&v23)&&(id(p14)<id(this)))){{
-updateVisualization(v3,p14,true,"black",0,(v16+"_pred0"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+}if((p16==this)){{
+print("Self loop");{if(this.TRUE)return ;}}
+}for(v18=0;(v18<v1);v18=v18+1){{
+if((funcheckIfNodeOnLevel(v18, p16)==this.TRUE)){{
+boolean v20 = false;
+v20=funCheckIfNodeInRange(v18, p16);
+boolean v21 = ((getArrayIndex(v4,null,(v18+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred0")))).node:null)==null);
+boolean v22 = ((getArrayIndex(v4,null,(v18+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred1")))).node:null)==null);
+boolean v23 = ((getArrayIndex(v4,null,(v18+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ0")))).node:null)==null);
+boolean v24 = ((getArrayIndex(v4,null,(v18+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ1")))).node:null)==null);
+boolean v25 = (funinteger(sub_str(v17, v18, (v18+1)))==0);
+if(((v21&&v25)&&(id(p16)<id(this)))){{
+updateVisualization(v4,p16,true,"black",0,(v18+"_pred0"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
-} else {if(((v20&&(!v23))&&(id(p14)<id(this)))){{
-updateVisualization(v3,p14,true,"black",0,(v16+"_pred1"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+} else {if(((v22&&(!v25))&&(id(p16)<id(this)))){{
+updateVisualization(v4,p16,true,"black",0,(v18+"_pred1"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
-} else {if(((v21&&v23)&&(id(p14)>id(this)))){{
-updateVisualization(v3,p14,true,"black",0,(v16+"_succ0"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+} else {if(((v23&&v25)&&(id(p16)>id(this)))){{
+updateVisualization(v4,p16,true,"black",0,(v18+"_succ0"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
-} else {if(((v22&&(!v23))&&(id(p14)>id(this)))){{
-updateVisualization(v3,p14,true,"black",0,(v16+"_succ1"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+} else {if(((v24&&(!v25))&&(id(p16)>id(this)))){{
+updateVisualization(v4,p16,true,"black",0,(v18+"_succ1"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
-} else {if(v18){{
-if((id(p14)>id(this))){{
-if((funinteger(sub_str(v15, v16, (v16+1)))==1)){{
-if((id(p14)<id((getArrayIndex(v3,null,(v16+"_succ1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ1")))).node:null)))){{
-print(((("better succ_1 found: "+id(p14))+" is new succ1 instead of ")+id((getArrayIndex(v3,null,(v16+"_succ1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ1")))).node:null))));updateVisualization(v3,p14,true,"black",0,(v16+"_succ1"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+} else {if(v20){{
+if((id(p16)>id(this))){{
+if((funinteger(sub_str(v17, v18, (v18+1)))==1)){{
+if((id(p16)<id((getArrayIndex(v4,null,(v18+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ1")))).node:null)))){{
+print(((("better succ_1 found: "+id(p16))+" is new succ1 instead of ")+id((getArrayIndex(v4,null,(v18+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ1")))).node:null))));updateVisualization(v4,p16,true,"black",0,(v18+"_succ1"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
 }}
 } else {{
-if((id(p14)<id((getArrayIndex(v3,null,(v16+"_succ0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ0")))).node:null)))){{
-print(((("better succ_0 found: "+id(p14))+" is new succ0 instead of ")+id((getArrayIndex(v3,null,(v16+"_succ0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ0")))).node:null))));updateVisualization(v3,p14,true,"black",0,(v16+"_succ0"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+if((id(p16)<id((getArrayIndex(v4,null,(v18+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ0")))).node:null)))){{
+print(((("better succ_0 found: "+id(p16))+" is new succ0 instead of ")+id((getArrayIndex(v4,null,(v18+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ0")))).node:null))));updateVisualization(v4,p16,true,"black",0,(v18+"_succ0"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
 }}
 }}
-}if((id(p14)<id(this))){{
-if((funinteger(sub_str(v15, v16, (v16+1)))==1)){{
-if((id(p14)>id((getArrayIndex(v3,null,(v16+"_pred1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred1")))).node:null)))){{
-print(((("better pred_1 found: "+id(p14))+" is new pred_1 instead of ")+id((getArrayIndex(v3,null,(v16+"_pred1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred1")))).node:null))));updateVisualization(v3,p14,true,"black",0,(v16+"_pred1"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+}if((id(p16)<id(this))){{
+if((funinteger(sub_str(v17, v18, (v18+1)))==1)){{
+if((id(p16)>id((getArrayIndex(v4,null,(v18+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred1")))).node:null)))){{
+print(((("better pred_1 found: "+id(p16))+" is new pred_1 instead of ")+id((getArrayIndex(v4,null,(v18+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred1")))).node:null))));updateVisualization(v4,p16,true,"black",0,(v18+"_pred1"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
 }}
 } else {{
-if((id(p14)>id((getArrayIndex(v3,null,(v16+"_pred0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred0")))).node:null)))){{
-print(((("better pred_0 found: "+id(p14))+" is new pred_0 instead of ")+id((getArrayIndex(v3,null,(v16+"_pred0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred0")))).node:null))));updateVisualization(v3,p14,true,"black",0,(v16+"_pred0"));
-updateVisualization(v4,p14,true,"black",0,v15);
-setArrayIndex('=',v17,Arrays.asList(v15),p14,null,0);
+if((id(p16)>id((getArrayIndex(v4,null,(v18+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred0")))).node:null)))){{
+print(((("better pred_0 found: "+id(p16))+" is new pred_0 instead of ")+id((getArrayIndex(v4,null,(v18+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred0")))).node:null))));updateVisualization(v4,p16,true,"black",0,(v18+"_pred0"));
+updateVisualization(v5,p16,true,"black",0,v17);
 }
 }}
 }}
 }}
-}}}}}for(Entry<?,?> ev4:v4.entrySet()){
-String i24=(String) (ev4.getKey() instanceof Edge ? ((Edge)ev4.getKey()).node : ev4.getKey());
-simulator.Node i25=(simulator.Node) (ev4.getValue() instanceof Edge ? ((Edge)ev4.getValue()).node : ev4.getValue());
+}}}}}for(Entry<?,?> ev5:v5.entrySet()){
+String i26=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i27=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-v18=funCheckIfNodeInRange(v16, i25);
-if((i25==null)){{
+v20=funCheckIfNodeInRange(v18, i27);
+if((i27==null)){{
 print("NEEEEIIIIINNNNN");}
-}if(((((v18||((getArrayIndex(v3,null,(v16+"_pred0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred0")))).node:null)==i25))||((getArrayIndex(v3,null,(v16+"_pred1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_pred1")))).node:null)==i25))||((getArrayIndex(v3,null,(v16+"_succ0"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ0")))).node:null)==i25))||((getArrayIndex(v3,null,(v16+"_succ1"))!=null?((Edge)(getArrayIndex(v3,null,(v16+"_succ1")))).node:null)==i25))){{
-setArrayIndex('=',v17,Arrays.asList(i24),i25,null,0);
+}if(((((v20||((getArrayIndex(v4,null,(v18+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred0")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred1")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ0")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ1")))).node:null)==i27))){{
+setArrayIndex('=',v19,Arrays.asList(i26),i27,null,0);
 }
 }}
 
 }
 }
 }}
-}List<simulator.Node> v26 = new ArrayList<simulator.Node>();
-int v27 = 0;
-v27=0;
-for(Entry<?,?> ev4:v4.entrySet()){
-String i28=(String) (ev4.getKey() instanceof Edge ? ((Edge)ev4.getKey()).node : ev4.getKey());
-simulator.Node i29=(simulator.Node) (ev4.getValue() instanceof Edge ? ((Edge)ev4.getValue()).node : ev4.getValue());
+}List<simulator.Node> v28 = new ArrayList<simulator.Node>();
+int v29 = 0;
+v29=0;
+for(Entry<?,?> ev5:v5.entrySet()){
+String i30=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i31=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if((getArrayIndex(v17,null,i28)==null)){{
-setArrayIndex('=',v26,Arrays.asList(v27),i29,null,1);
-print(("to be forwarded: "+id(i29)));v27=v27+1;
+if((getArrayIndex(v19,null,i30)==null)){{
+setArrayIndex('=',v28,Arrays.asList(v29),i31,null,1);
+print(("to be forwarded: "+id(i31)));v29=v29+1;
 }
 }}
 
 }
-clearArray(v4,true);
-for(Entry<?,?> ev17:v17.entrySet()){
-String i30=(String) (ev17.getKey() instanceof Edge ? ((Edge)ev17.getKey()).node : ev17.getKey());
-simulator.Node i31=(simulator.Node) (ev17.getValue() instanceof Edge ? ((Edge)ev17.getValue()).node : ev17.getValue());
+clearArray(v5,true);
+for(Entry<?,?> ev19:v19.entrySet()){
+String i32=(String) (ev19.getKey() instanceof Edge ? ((Edge)ev19.getKey()).node : ev19.getKey());
+simulator.Node i33=(simulator.Node) (ev19.getValue() instanceof Edge ? ((Edge)ev19.getValue()).node : ev19.getValue());
 {
-updateVisualization(v4,i31,true,"black",0,i30);
+updateVisualization(v5,i33,true,"black",0,i32);
 }
 
 }
-for(simulator.Node i32:createIterable(v26)){{
-funforwardNode_old(i32);}
+for(simulator.Node i34:createIterable(v28)){{
+funforwardNode_old(i34);}
 }}
  catch (ArithmeticException e){ print("arithmetic exception in linearize: "+e.getMessage()); } return ;} long callCounterentry;
-protected void funentry(simulator.Node p33) { callCounterentry++; try {
-funlinearize(p33);}
+protected void funentry(simulator.Node p35) { callCounterentry++; try {
+funlinearize(p35);}
  catch (ArithmeticException e){ print("arithmetic exception in entry: "+e.getMessage()); } return ;} long callCountersearch;
-protected void funsearch(int p34) { callCountersearch++; try {
-String v35 = "";
-v35=funbitfolge(p34);
-if(((getArrayIndex(v4,null,v35)!=null?((Edge)(getArrayIndex(v4,null,v35))).node:null)!=null)){{
-print(("Found: "+(getArrayIndex(v4,null,v35)!=null?((Edge)(getArrayIndex(v4,null,v35))).node:null)));}
+protected void funsearch(int p36) { callCountersearch++; try {
+String v37 = "";
+v37=funbitfolge(p36);
+if(((getArrayIndex(v5,null,v37)!=null?((Edge)(getArrayIndex(v5,null,v37))).node:null)!=null)){{
+print(("Found: "+(getArrayIndex(v5,null,v37)!=null?((Edge)(getArrayIndex(v5,null,v37))).node:null)));}
 } else {{
-simulator.Node v36 = null;
-v36=fungetLongestCommonPrefixNode(v2);
-{if (v36!=null) v36.send("search",false,p34);}
+simulator.Node v38 = null;
+v38=fungetLongestCommonPrefixNode(v2);
+{if (v38!=null) v38.send("search",false,p36);}
 }
 }}
- catch (ArithmeticException e){ print("arithmetic exception in search: "+e.getMessage()); } return ;} long callCounterinteger;
-protected int funinteger(String p37) { callCounterinteger++; try {
-if((p37==null?"1"==null:p37.equals("1"))){{
+ catch (ArithmeticException e){ print("arithmetic exception in search: "+e.getMessage()); } return ;} long callCounterforgetNode;
+protected void funforgetNode(simulator.Node p39) { callCounterforgetNode++; try {
+if((v3==this.TRUE)){{
+{if(this.TRUE)return ;}}
+}if(((getArrayIndex(v6,null,funbitfolge(id(p39)))!=null?((Edge)(getArrayIndex(v6,null,funbitfolge(id(p39))))).node:null)==p39)){{
+print((("Node "+id(p39))+" already forgotten"));{if(this.TRUE)return ;}}
+}print(("Forget Node "+id(p39)));updateVisualization(v6,p39,true,"blue",0,funbitfolge(id(p39)));
+int v40 = 0;
+for(v40=0;(v40<v1);v40=v40+1){{
+if(((getArrayIndex(v4,null,(v40+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred0")))).node:null)==p39)){{
+updateVisualization(v4,null,true,"black",0,(v40+"_pred0"));
+}
+} else {if(((getArrayIndex(v4,null,(v40+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred0")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v40+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred0")))).node:null)!=null) (getArrayIndex(v4,null,(v40+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred0")))).node:null).send("forgetNode",false,p39);}
+}
+}}if(((getArrayIndex(v4,null,(v40+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred1")))).node:null)==p39)){{
+updateVisualization(v4,null,true,"black",0,(v40+"_pred1"));
+}
+} else {if(((getArrayIndex(v4,null,(v40+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred1")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v40+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred1")))).node:null)!=null) (getArrayIndex(v4,null,(v40+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_pred1")))).node:null).send("forgetNode",false,p39);}
+}
+}}if(((getArrayIndex(v4,null,(v40+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ0")))).node:null)==p39)){{
+updateVisualization(v4,null,true,"black",0,(v40+"_succ0"));
+}
+} else {if(((getArrayIndex(v4,null,(v40+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ0")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v40+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ0")))).node:null)!=null) (getArrayIndex(v4,null,(v40+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ0")))).node:null).send("forgetNode",false,p39);}
+}
+}}if(((getArrayIndex(v4,null,(v40+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ1")))).node:null)==p39)){{
+updateVisualization(v4,null,true,"black",0,(v40+"_succ1"));
+}
+} else {if(((getArrayIndex(v4,null,(v40+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ1")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v40+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ1")))).node:null)!=null) (getArrayIndex(v4,null,(v40+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v40+"_succ1")))).node:null).send("forgetNode",false,p39);}
+}
+}}}
+}for(Entry<?,?> ev5:v5.entrySet()){
+String i41=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i42=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
+{
+if((i42==p39)){{
+updateVisualization(v5,null,true,"black",0,i41);
+}
+} else {if((i42!=null)){{
+{if (i42!=null) i42.send("forgetNode",false,p39);}
+}
+}}}
+
+}
+}
+ catch (ArithmeticException e){ print("arithmetic exception in forgetNode: "+e.getMessage()); } return ;} long callCounterdelete;
+protected void fundelete() { callCounterdelete++; try {
+int v43 = 0;
+for(v43=0;(v43<v1);v43=v43+1){{
+if(((getArrayIndex(v4,null,(v43+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred0")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v43+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred0")))).node:null)!=null) (getArrayIndex(v4,null,(v43+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred0")))).node:null).send("forgetNode",false,this);}
+}
+}if(((getArrayIndex(v4,null,(v43+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred1")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v43+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred1")))).node:null)!=null) (getArrayIndex(v4,null,(v43+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred1")))).node:null).send("forgetNode",false,this);}
+}
+}if(((getArrayIndex(v4,null,(v43+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ0")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v43+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ0")))).node:null)!=null) (getArrayIndex(v4,null,(v43+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ0")))).node:null).send("forgetNode",false,this);}
+}
+}if(((getArrayIndex(v4,null,(v43+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ1")))).node:null)!=null)){{
+{if ((getArrayIndex(v4,null,(v43+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ1")))).node:null)!=null) (getArrayIndex(v4,null,(v43+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ1")))).node:null).send("forgetNode",false,this);}
+}
+}}
+}v3=this.TRUE;
+clearArray(v5,true);
+clearArray(v4,true);
+}
+ catch (ArithmeticException e){ print("arithmetic exception in delete: "+e.getMessage()); } return ;} long callCounterinteger;
+protected int funinteger(String p44) { callCounterinteger++; try {
+if((p44==null?"1"==null:p44.equals("1"))){{
 {if(this.TRUE)return 1;}}
 } else {{
 {if(this.TRUE)return 0;}}
 }}
  catch (ArithmeticException e){ print("arithmetic exception in integer: "+e.getMessage()); } return 0;} long callCountercheckIfNodeOnLevel;
-protected boolean funcheckIfNodeOnLevel(int p38, simulator.Node p39) { callCountercheckIfNodeOnLevel++; try {
-int v40 = 0;
-v40=funlongestCommonPrefix(v2, funbitfolge(id(p39)));
-if((v40>=p38)){{
+protected boolean funcheckIfNodeOnLevel(int p45, simulator.Node p46) { callCountercheckIfNodeOnLevel++; try {
+int v47 = 0;
+v47=funlongestCommonPrefix(v2, funbitfolge(id(p46)));
+if((v47>=p45)){{
 {if(this.TRUE)return this.TRUE;}}
 } else {{
 {if(this.TRUE)return this.FALSE;}}
 }}
  catch (ArithmeticException e){ print("arithmetic exception in checkIfNodeOnLevel: "+e.getMessage()); } return false;} long callCounterbitfolge;
-protected String funbitfolge(int p41) { callCounterbitfolge++; try {
-int v42 = 97;
-int v43 = (((p41*37)+17)%v42);
-int v44 = 0;
-String v45 = "";
-int v46 = 0;
-for(v46=0;(v46<v1);v46=v46+1){{
-v44=(v43%2);
-if((v44==1)){{
-v45=("1"+v45);
+protected String funbitfolge(int p48) { callCounterbitfolge++; try {
+int v49 = 97;
+int v50 = (((p48*37)+17)%v49);
+int v51 = 0;
+String v52 = "";
+int v53 = 0;
+for(v53=0;(v53<v1);v53=v53+1){{
+v51=(v50%2);
+if((v51==1)){{
+v52=("1"+v52);
 }
 } else {{
-v45=("0"+v45);
+v52=("0"+v52);
 }
-}v43=(v43/2);
+}v50=(v50/2);
 }
-}{if(this.TRUE)return v45;}}
+}{if(this.TRUE)return v52;}}
  catch (ArithmeticException e){ print("arithmetic exception in bitfolge: "+e.getMessage()); } return "";} long callCounterminPred;
-protected simulator.Node funminPred(int p47) { callCounterminPred++; try {
-simulator.Node v48 = null;
-simulator.Node v49 = null;
-v48=(getArrayIndex(v3,null,(p47+"_pred0"))!=null?((Edge)(getArrayIndex(v3,null,(p47+"_pred0")))).node:null);
-v49=(getArrayIndex(v3,null,(p47+"_pred1"))!=null?((Edge)(getArrayIndex(v3,null,(p47+"_pred1")))).node:null);
-if(((v48==null)&&(v49==null))){{
+protected simulator.Node funminPred(int p54) { callCounterminPred++; try {
+simulator.Node v55 = null;
+simulator.Node v56 = null;
+v55=(getArrayIndex(v4,null,(p54+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(p54+"_pred0")))).node:null);
+v56=(getArrayIndex(v4,null,(p54+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(p54+"_pred1")))).node:null);
+if(((v55==null)&&(v56==null))){{
 {if(this.TRUE)return null;}}
-}if((v48==null)){{
-{if(this.TRUE)return v49;}}
-}if((v49==null)){{
-{if(this.TRUE)return v48;}}
-}if((id(v48)<id(v49))){{
-{if(this.TRUE)return v48;}}
+}if((v55==null)){{
+{if(this.TRUE)return v56;}}
+}if((v56==null)){{
+{if(this.TRUE)return v55;}}
+}if((id(v55)<id(v56))){{
+{if(this.TRUE)return v55;}}
 } else {{
-{if(this.TRUE)return v49;}}
+{if(this.TRUE)return v56;}}
 }}
  catch (ArithmeticException e){ print("arithmetic exception in minPred: "+e.getMessage()); } return null;} long callCounterglobalMinPred;
 protected simulator.Node funglobalMinPred() { callCounterglobalMinPred++; try {
-int v50 = 0;
-simulator.Node v51 = null;
-v51=funminPred(0);
-for(v50=1;(v50<v1);v50=v50+1){{
-if((id(v51)>id(funminPred(v50)))){{
-v51=funminPred(v50);
+int v57 = 0;
+simulator.Node v58 = null;
+v58=funminPred(0);
+for(v57=1;(v57<v1);v57=v57+1){{
+if((id(v58)>id(funminPred(v57)))){{
+v58=funminPred(v57);
 }
 }}
-}{if(this.TRUE)return v51;}}
+}{if(this.TRUE)return v58;}}
  catch (ArithmeticException e){ print("arithmetic exception in globalMinPred: "+e.getMessage()); } return null;} long callCountermaxSucc;
-protected simulator.Node funmaxSucc(int p52) { callCountermaxSucc++; try {
-simulator.Node v53 = null;
-simulator.Node v54 = null;
-v53=(getArrayIndex(v3,null,(p52+"_succ0"))!=null?((Edge)(getArrayIndex(v3,null,(p52+"_succ0")))).node:null);
-v54=(getArrayIndex(v3,null,(p52+"_succ1"))!=null?((Edge)(getArrayIndex(v3,null,(p52+"_succ1")))).node:null);
-simulator.Node v55 = null;
-if((id(v53)>id(v54))){{
-v55=v53;
+protected simulator.Node funmaxSucc(int p59) { callCountermaxSucc++; try {
+simulator.Node v60 = null;
+simulator.Node v61 = null;
+v60=(getArrayIndex(v4,null,(p59+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(p59+"_succ0")))).node:null);
+v61=(getArrayIndex(v4,null,(p59+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(p59+"_succ1")))).node:null);
+simulator.Node v62 = null;
+if((id(v60)>id(v61))){{
+v62=v60;
 }
 } else {{
-v55=v54;
+v62=v61;
 }
-}{if(this.TRUE)return v55;}}
+}{if(this.TRUE)return v62;}}
  catch (ArithmeticException e){ print("arithmetic exception in maxSucc: "+e.getMessage()); } return null;} long callCounterglobalMaxSucc;
 protected simulator.Node funglobalMaxSucc() { callCounterglobalMaxSucc++; try {
-int v56 = 0;
-simulator.Node v57 = null;
-v57=funmaxSucc(0);
-for(v56=1;(v56<v1);v56=v56+1){{
-if((id(v57)<id(funmaxSucc(v56)))){{
-v57=funmaxSucc(v56);
+int v63 = 0;
+simulator.Node v64 = null;
+v64=funmaxSucc(0);
+for(v63=1;(v63<v1);v63=v63+1){{
+if((id(v64)<id(funmaxSucc(v63)))){{
+v64=funmaxSucc(v63);
 }
 }}
-}{if(this.TRUE)return v57;}}
+}{if(this.TRUE)return v64;}}
  catch (ArithmeticException e){ print("arithmetic exception in globalMaxSucc: "+e.getMessage()); } return null;} long callCounterlongestCommonPrefix;
-protected int funlongestCommonPrefix(String p58, String p59) { callCounterlongestCommonPrefix++; try {
-int v60 = 0;
-int v61 = 0;
-v61=0;
-for(v60=0;(v60<v1);v60=v60+1){{
-if((sub_str(p58, v60, (v60+1))==null?sub_str(p59, v60, (v60+1))==null:sub_str(p58, v60, (v60+1)).equals(sub_str(p59, v60, (v60+1))))){{
-v61=v61+1;
+protected int funlongestCommonPrefix(String p65, String p66) { callCounterlongestCommonPrefix++; try {
+int v67 = 0;
+int v68 = 0;
+v68=0;
+for(v67=0;(v67<v1);v67=v67+1){{
+if((sub_str(p65, v67, (v67+1))==null?sub_str(p66, v67, (v67+1))==null:sub_str(p65, v67, (v67+1)).equals(sub_str(p66, v67, (v67+1))))){{
+v68=v68+1;
 }
 } else {{
 {if(this.TRUE)break;}}
 }}
-}{if(this.TRUE)return v61;}}
+}{if(this.TRUE)return v68;}}
  catch (ArithmeticException e){ print("arithmetic exception in longestCommonPrefix: "+e.getMessage()); } return 0;} long callCountergetLongestCommonPrefixNode;
-protected simulator.Node fungetLongestCommonPrefixNode(String p62) { callCountergetLongestCommonPrefixNode++; try {
-int v63 = 0;
-simulator.Node v64 = null;
-v63=(-1);
-v64=null;
-for(Entry<?,?> ev4:v4.entrySet()){
-String i65=(String) (ev4.getKey() instanceof Edge ? ((Edge)ev4.getKey()).node : ev4.getKey());
-simulator.Node i66=(simulator.Node) (ev4.getValue() instanceof Edge ? ((Edge)ev4.getValue()).node : ev4.getValue());
+protected simulator.Node fungetLongestCommonPrefixNode(String p69) { callCountergetLongestCommonPrefixNode++; try {
+int v70 = 0;
+simulator.Node v71 = null;
+v70=(-1);
+v71=null;
+for(Entry<?,?> ev5:v5.entrySet()){
+String i72=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i73=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if(!(p62==null?i65==null:p62.equals(i65))){{
-int v67 = 0;
-v67=funlongestCommonPrefix(p62, i65);
-if((v67>v63)){{
-v63=v67;
-v64=i66;
+if(!(p69==null?i72==null:p69.equals(i72))){{
+int v74 = 0;
+v74=funlongestCommonPrefix(p69, i72);
+if((v74>v70)){{
+v70=v74;
+v71=i73;
 }
 }}
 }}
 
 }
-if((v64==null)){{
+if((v71==null)){{
 print("nextNode is null");}
-}{if(this.TRUE)return v64;}}
+}{if(this.TRUE)return v71;}}
  catch (ArithmeticException e){ print("arithmetic exception in getLongestCommonPrefixNode: "+e.getMessage()); } return null;} long callCounterCheckIfNodeInRange;
-protected boolean funCheckIfNodeInRange(int p68, simulator.Node p69) { callCounterCheckIfNodeInRange++; try {
-simulator.Node v70 = funminPred(p68);
-simulator.Node v71 = funmaxSucc(p68);
-boolean v72 = false;
-v72=this.FALSE;
-if(((v70!=null)&&(v71!=null))){{
-boolean v73 = false;
-v73=this.FALSE;
-boolean v74 = false;
-v74=this.FALSE;
-if((id(p69)>id(v71))){{
-v73=this.TRUE;
+protected boolean funCheckIfNodeInRange(int p75, simulator.Node p76) { callCounterCheckIfNodeInRange++; try {
+simulator.Node v77 = funminPred(p75);
+simulator.Node v78 = funmaxSucc(p75);
+boolean v79 = false;
+v79=this.FALSE;
+if(((v77!=null)&&(v78!=null))){{
+boolean v80 = false;
+v80=this.FALSE;
+boolean v81 = false;
+v81=this.FALSE;
+if((id(p76)>id(v78))){{
+v80=this.TRUE;
 }
-}if((id(p69)<id(v70))){{
-v74=this.TRUE;
+}if((id(p76)<id(v77))){{
+v81=this.TRUE;
 }
-}v72=(!(v73||v74));
-if(((v72==this.FALSE)&&(id(p69)==1))){{
-print(("v: "+id(p69)));print(("minPred: "+id(v70)));print(("maxSucc: "+id(v71)));}
+}v79=(!(v80||v81));
+if(((v79==this.FALSE)&&(id(p76)==1))){{
+}
 }}
-} else {if(((v70==null)&&(v71==null))){{
-v72=this.TRUE;
+} else {if(((v77==null)&&(v78==null))){{
+v79=this.TRUE;
 }
-} else {if((((v70==null)&&(v71!=null))&&(id(p69)<=id(v71)))){{
-v72=this.TRUE;
+} else {if((((v77==null)&&(v78!=null))&&(id(p76)<=id(v78)))){{
+v79=this.TRUE;
 }
-} else {if((((v70!=null)&&(v71==null))&&(id(p69)>=id(v70)))){{
-v72=this.TRUE;
+} else {if((((v77!=null)&&(v78==null))&&(id(p76)>=id(v77)))){{
+v79=this.TRUE;
 }
-}}}}{if(this.TRUE)return v72;}}
+}}}}{if(this.TRUE)return v79;}}
  catch (ArithmeticException e){ print("arithmetic exception in CheckIfNodeInRange: "+e.getMessage()); } return false;} long callCounterforwardNode_old;
-protected void funforwardNode_old(simulator.Node p75) { callCounterforwardNode_old++; try {
-simulator.Node v76 = null;
-String v77 = "";
-v77=funbitfolge(id(p75));
-v76=fungetLongestCommonPrefixNode(v77);
-if((v76!=null)){{
-{if (v76!=null) v76.send("linearize",false,p75);}
-if((p75==null)){{
+protected void funforwardNode_old(simulator.Node p82) { callCounterforwardNode_old++; try {
+if(((getArrayIndex(v6,null,funbitfolge(id(p82)))!=null?((Edge)(getArrayIndex(v6,null,funbitfolge(id(p82))))).node:null)==p82)){{
+print((("Node "+id(p82))+" already forgotten - do not forward"));{if(this.TRUE)return ;}}
+}simulator.Node v83 = null;
+String v84 = "";
+v84=funbitfolge(id(p82));
+v83=fungetLongestCommonPrefixNode(v84);
+if((v83!=null)){{
+{if (v83!=null) v83.send("linearize",false,p82);}
+if((p82==null)){{
 print("forwardedNode is null");}
 }}
 } else {{
-print("Neiiiin");{if (this!=null) this.send("linearize",false,p75);}
+print("Neiiiin");{if (this!=null) this.send("linearize",false,p82);}
 }
 }}
  catch (ArithmeticException e){ print("arithmetic exception in forwardNode_old: "+e.getMessage()); } return ;} long callCounterforwardNode;
-protected void funforwardNode(simulator.Node p78) { callCounterforwardNode++; try {
-simulator.Node v79 = null;
-if((p78==null)){{
+protected void funforwardNode(simulator.Node p85) { callCounterforwardNode++; try {
+simulator.Node v86 = null;
+if((p85==null)){{
 print("forwardedNode is null");}
-}if((id(p78)<id(this))){{
-v79=funglobalMinPred();
-{if (v79!=null) v79.send("linearize",false,p78);}
+}if((id(p85)<id(this))){{
+v86=funglobalMinPred();
+{if (v86!=null) v86.send("linearize",false,p85);}
 }
-} else {if((id(p78)>id(this))){{
-v79=funglobalMaxSucc();
-{if (v79!=null) v79.send("linearize",false,p78);}
+} else {if((id(p85)>id(this))){{
+v86=funglobalMaxSucc();
+{if (v86!=null) v86.send("linearize",false,p85);}
 }
 } else {{
 }
 }}}
  catch (ArithmeticException e){ print("arithmetic exception in forwardNode: "+e.getMessage()); } return ;} long callCountersortedLeftNeighbors;
-protected void funsortedLeftNeighbors(int p80) { callCountersortedLeftNeighbors++; try {
-int v81 = 0;
-clearArray(v5,true);
-for(Entry<?,?> ev4:v4.entrySet()){
-String i82=(String) (ev4.getKey() instanceof Edge ? ((Edge)ev4.getKey()).node : ev4.getKey());
-simulator.Node i83=(simulator.Node) (ev4.getValue() instanceof Edge ? ((Edge)ev4.getValue()).node : ev4.getValue());
+protected void funsortedLeftNeighbors(int p87) { callCountersortedLeftNeighbors++; try {
+int v88 = 0;
+clearArray(v7,true);
+for(Entry<?,?> ev5:v5.entrySet()){
+String i89=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i90=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if((funcheckIfNodeOnLevel(p80, i83)&&(id(i83)<id(this)))){{
-updateVisualization(v5,i83,true,"black",1,v81);
-v81=(v81+1);
+if((funcheckIfNodeOnLevel(p87, i90)&&(id(i90)<id(this)))){{
+updateVisualization(v7,i90,true,"black",1,v88);
+v88=(v88+1);
 }
 }}
 
 }
 funbubbleSort();{if(this.TRUE)return ;}}
  catch (ArithmeticException e){ print("arithmetic exception in sortedLeftNeighbors: "+e.getMessage()); } return ;} long callCountersortedRightNeighbors;
-protected void funsortedRightNeighbors(int p84) { callCountersortedRightNeighbors++; try {
-int v85 = 0;
-clearArray(v5,true);
-for(Entry<?,?> ev4:v4.entrySet()){
-String i86=(String) (ev4.getKey() instanceof Edge ? ((Edge)ev4.getKey()).node : ev4.getKey());
-simulator.Node i87=(simulator.Node) (ev4.getValue() instanceof Edge ? ((Edge)ev4.getValue()).node : ev4.getValue());
+protected void funsortedRightNeighbors(int p91) { callCountersortedRightNeighbors++; try {
+int v92 = 0;
+clearArray(v7,true);
+for(Entry<?,?> ev5:v5.entrySet()){
+String i93=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i94=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if((funcheckIfNodeOnLevel(p84, i87)&&(id(i87)>id(this)))){{
-updateVisualization(v5,i87,true,"black",1,v85);
-v85=(v85+1);
+if((funcheckIfNodeOnLevel(p91, i94)&&(id(i94)>id(this)))){{
+updateVisualization(v7,i94,true,"black",1,v92);
+v92=(v92+1);
 }
 }}
 
@@ -623,17 +711,17 @@ v85=(v85+1);
 funbubbleSort();{if(this.TRUE)return ;}}
  catch (ArithmeticException e){ print("arithmetic exception in sortedRightNeighbors: "+e.getMessage()); } return ;} long callCounterbubbleSort;
 protected void funbubbleSort() { callCounterbubbleSort++; try {
-int v88 = 0;
-v88=length((List<Node>)copyEdgeArrayToNodeArray(v5,1));
-int v89 = 0;
-int v90 = 0;
-simulator.Node v91 = null;
-for(v89=0;(v89<(v88-1));v89=v89+1){{
-for(v90=0;(v90<((v88-v89)-1));v90=v90+1){{
-if((id((getArrayIndex(v5,null,v90)!=null?((Edge)(getArrayIndex(v5,null,v90))).node:null))>id((getArrayIndex(v5,null,(v90+1))!=null?((Edge)(getArrayIndex(v5,null,(v90+1)))).node:null)))){{
-v91=(getArrayIndex(v5,null,v90)!=null?((Edge)(getArrayIndex(v5,null,v90))).node:null);
-updateVisualization(v5,(getArrayIndex(v5,null,(v90+1))!=null?((Edge)(getArrayIndex(v5,null,(v90+1)))).node:null),true,"black",1,v90);
-updateVisualization(v5,v91,true,"black",1,(v90+1));
+int v95 = 0;
+v95=length((List<Node>)copyEdgeArrayToNodeArray(v7,1));
+int v96 = 0;
+int v97 = 0;
+simulator.Node v98 = null;
+for(v96=0;(v96<(v95-1));v96=v96+1){{
+for(v97=0;(v97<((v95-v96)-1));v97=v97+1){{
+if((id((getArrayIndex(v7,null,v97)!=null?((Edge)(getArrayIndex(v7,null,v97))).node:null))>id((getArrayIndex(v7,null,(v97+1))!=null?((Edge)(getArrayIndex(v7,null,(v97+1)))).node:null)))){{
+v98=(getArrayIndex(v7,null,v97)!=null?((Edge)(getArrayIndex(v7,null,v97))).node:null);
+updateVisualization(v7,(getArrayIndex(v7,null,(v97+1))!=null?((Edge)(getArrayIndex(v7,null,(v97+1)))).node:null),true,"black",1,v97);
+updateVisualization(v7,v98,true,"black",1,(v97+1));
 }
 }}
 }}

@@ -1,8 +1,10 @@
 succPredListclientNode{
     int limit = 5;
     string bitString;
+    bool deleted = false;
     [string, node] succPredList; /* [level_succ/predBit, node] */
     [string, node] neighbors;  /*[bitstring, node]*/
+    [string, node] toBeDeleted blue; /*darf nicht als Kante angezeigt werden*/
     node[] tempArray;
 
     /* [0, 1, 2, 3, 4, 5][succ0, succ1, pred0, pred1][node] */
@@ -35,6 +37,9 @@ succPredListclientNode{
 
         tempArray <<<<;
         int currentLevel;
+        if (deleted == true){
+            return;
+        }
         for(currentLevel=0; currentLevel<limit; currentLevel++)
         {
             sortedLeftNeighbors(currentLevel); /*tempArray wird mit sorted LeftNeighbors der richtigen Ebene gefüllt*/
@@ -96,14 +101,7 @@ succPredListclientNode{
         /* Hier rufen wir systematisch das linearize der nachbar knoten auf und stellen uns somit bei den Nachbarn vor */
     }
     linearize(node v){
-        /*print("linearize");
-        print(id(v));*/
-        /* Regel 2 (überbrücken) */
-        /* Hier erhalten wir die Vorgestellten Knoten und aktualisiern unsere Nachbarn / succPredList */
 
-        /** 1. Aktualisiere Ranges und Nachbarschaft für jedes Level i */
-        /** 2. Jeder Knoten w, der nun nicht mehr im range liegt -> delegieren (linearize bei anderem Knoten) zu Knoten mit größter Präfixübereinstimmung*/
-        
        /* BREAKPOINT
         print(id(this));
         print(id(v)); */
@@ -114,13 +112,23 @@ succPredListclientNode{
 
         [string, node] globalNewNeighbors;  /*[bitstring, node]*/
 
+
+        if (deleted == true){
+            return;
+        }
+
+        if (toBeDeleted[bitfolge(id(v))] == v){
+            print("Node " + id(v) + " already forgotten");
+            return;
+        }
+
         if(v == null){
             print("Null Node linearized");
             return;
         }
 
         if(v == this){
-            print("Self edge");
+            print("Self loop");
             return;
         }
 
@@ -257,6 +265,87 @@ succPredListclientNode{
             longestCommonPrefixNode = getLongestCommonPrefixNode(bitString);
             longestCommonPrefixNode -> search(searchedId);
         }
+    }
+
+    forgetNode (node v){
+        /*Flag für zukünftige linearize einstellen z.B. id -> deleted WIE MACHEN OHNE EDGES ZU ERSTELLEN?*/
+        /*gesamte Listen durchgehen und rauslöschen*/
+
+        /*Nachricht an Nachbarknoten weiterleiten - aber wann soll man da denn stoppen? Die nachricht soll ja nicht ewig im Umlauf sein - abfrage ob v schon vergessen ist am anfang*/
+        
+        if (deleted == true){
+            return;
+        }
+        if (toBeDeleted[bitfolge(id(v))] == v){
+            print("Node " + id(v) + " already forgotten");
+            return;
+        }
+        print("Forget Node " + id(v));
+        toBeDeleted[bitfolge((id(v)))] = v;
+        int currentLevel;
+        for(currentLevel = 0; currentLevel<limit; currentLevel++){
+            if(succPredList[currentLevel + "_pred0"] == v){
+                succPredList[currentLevel + "_pred0"] = null;
+            }
+            else if (succPredList[currentLevel + "_pred0"] != null){
+                succPredList[currentLevel + "_pred0"] -> forgetNode(v);
+            }
+            if(succPredList[currentLevel + "_pred1"] == v){
+                succPredList[currentLevel + "_pred1"] = null;
+            }
+            else if (succPredList[currentLevel + "_pred1"] != null){
+                succPredList[currentLevel + "_pred1"] -> forgetNode(v);
+            }
+            if(succPredList[currentLevel + "_succ0"] == v){
+                succPredList[currentLevel + "_succ0"] = null;
+            }
+            else if (succPredList[currentLevel + "_succ0"] != null){
+                succPredList[currentLevel + "_succ0"] -> forgetNode(v); 
+            }
+            if(succPredList[currentLevel + "_succ1"] == v){
+                succPredList[currentLevel + "_succ1"] = null;
+            }
+            else if (succPredList[currentLevel + "_succ1"] != null){
+                succPredList[currentLevel + "_succ1"] -> forgetNode(v);
+            }
+        }
+
+        for (string bitString : node neighbor : neighbors){ 
+            if(neighbor == v){
+                neighbors[bitString] = null;
+            }
+            else if (neighbor != null){
+                neighbor -> forgetNode(v);
+            }
+            
+        }
+
+        /*Nachricht an Nachbarknoten weiterleiten - aber wann soll man da denn stoppen? Die nachricht soll ja nicht ewig im Umlauf sein - abfrage ob v schon vergessen ist am anfang*/
+    }
+
+    delete(){
+        /*for ingoing edges*/
+        int currentLevel;
+        for(currentLevel = 0; currentLevel<limit; currentLevel++){
+            if(succPredList[currentLevel + "_pred0"] != null){
+                succPredList[currentLevel + "_pred0"] -> forgetNode(this);
+            }
+            if(succPredList[currentLevel + "_pred1"] != null){
+                succPredList[currentLevel + "_pred1"] -> forgetNode(this);
+            }
+            if(succPredList[currentLevel + "_succ0"] != null){
+                succPredList[currentLevel + "_succ0"] -> forgetNode(this);
+            }
+            if(succPredList[currentLevel + "_succ1"] != null){
+                succPredList[currentLevel + "_succ1"] -> forgetNode(this);
+            }
+        }
+        /*Muss hier eine Funktion an alle Nachbarn losgeschickt werden, damit die den Knoten vergessen & die nachbarn müssen die nachricht auch weiterleiten?*/
+        /*for outgoing edges */
+        deleted = true;
+        neighbors <<<<;
+        succPredList <<<<;
+        /*unser prof hat gesagt, dass beim Skip plus graphen die Knoten den Graphen einfach verlassen können, weil er so gut vernetzt ist. aber wie mache ich das? Wie sorge ich dafür, dass auch die anderen Knoten ihn vergessen?*/
     }
 
     integer int (string x){
@@ -464,6 +553,10 @@ succPredListclientNode{
     }
 
     forwardNode_old (node forwardedNode) {
+        if (toBeDeleted[bitfolge(id(forwardedNode))] == forwardedNode){
+            print("Node " + id(forwardedNode) + " already forgotten - do not forward");
+            return;
+        }
         node longestCommonPrefixNode; /*ich glaube das ergibt gar keinen sinn*/
         string bitString;
         bitString = bitfolge(id(forwardedNode));
@@ -476,7 +569,7 @@ succPredListclientNode{
         } else {
             print("Neiiiin");
             /*Fallback */
-            this -> linearize(forwardedNode); /* To be deleted */
+            this -> linearize(forwardedNode); 
             /*wir sollten nie in den Fall kommen, da wir schon succ und pred auf null */
             /*Was tun wir wenn nextNode == null -> Dann haben wir problem -> dann müssen wir den aufnehen wenn wir noch keine nachbarn haben */
         }
