@@ -215,11 +215,7 @@ succPredListclientNode{
                     if(neighbor == null){
                         print("neighbor is null because we set it to null (forget node)");
                     }
-                    /* Dieses hier hat auch keine stabilisierung gebracht. Können auch später wieder auf inRange ändern */
-                    /*if(inRange || succPredList[currentLevel + "_pred0"] == neighbor || succPredList[currentLevel + "_pred1"] == neighbor || succPredList[currentLevel + "_succ0"] == neighbor || succPredList[currentLevel + "_succ1"] == neighbor){
-                        globalNewNeighbors[bitString] = neighbor;
-                    }*/
-                    if(inRange && (neighbor != null)){ 
+                    if((inRange && (neighbor != null))  || (succPredList[currentLevel + "_pred0"] == neighbor) || (succPredList[currentLevel + "_pred1"] == neighbor) || (succPredList[currentLevel + "_succ0"] == neighbor) || (succPredList[currentLevel + "_succ1"] == neighbor)){ 
                         globalNewNeighbors[bitString] = neighbor;
                     }
                 }
@@ -230,15 +226,12 @@ succPredListclientNode{
         /*Alle Nachbarkknoten weiterleiten die wir oben rauslöschen */
 
         node[] toBeforwardedNodes;
-        int numberOfNodes;
-        numberOfNodes = 0;
-
+        int i = 0;
         for (string bitString : node neighbor : neighbors){
-
             if(globalNewNeighbors[bitString] == null){
-                toBeforwardedNodes[numberOfNodes] = neighbor;
+                toBeforwardedNodes[i] = neighbor;
                 print("to be forwarded: " + id(neighbor));
-                numberOfNodes++;
+                i++;
             }
         }
 
@@ -536,12 +529,6 @@ succPredListclientNode{
             }
             
             inRange = !(biggerThanSucc || smallerThanPred); 
-
-            if(inRange == false && id(v) == 1){
-               /*  print("v: " + id(v));
-                print("minPred: " + id(minPred));
-                print("maxSucc: " + id(maxSucc));*/
-            }
         }
         else if ((minPred == null) && (maxSucc == null)){
             inRange = true;

@@ -371,7 +371,7 @@ simulator.Node i27=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5
 v20=funCheckIfNodeInRange(v18, i27);
 if((i27==null)){{
 print("neighbor is null because we set it to null (forget node)");}
-}if((v20&&(i27!=null))){{
+}if((((((v20&&(i27!=null))||((getArrayIndex(v4,null,(v18+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred0")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_pred1")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ0")))).node:null)==i27))||((getArrayIndex(v4,null,(v18+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v18+"_succ1")))).node:null)==i27))){{
 setArrayIndex('=',v19,Arrays.asList(i26),i27,null,0);
 }
 }}
@@ -381,7 +381,6 @@ setArrayIndex('=',v19,Arrays.asList(i26),i27,null,0);
 }}
 }List<simulator.Node> v28 = new ArrayList<simulator.Node>();
 int v29 = 0;
-v29=0;
 for(Entry<?,?> ev5:v5.entrySet()){
 String i30=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
 simulator.Node i31=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
@@ -631,9 +630,7 @@ v80=this.TRUE;
 v81=this.TRUE;
 }
 }v79=(!(v80||v81));
-if(((v79==this.FALSE)&&(id(p76)==1))){{
 }
-}}
 } else {if(((v77==null)&&(v78==null))){{
 v79=this.TRUE;
 }
