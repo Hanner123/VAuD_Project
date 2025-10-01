@@ -1,4 +1,4 @@
-// C:\Users\joshu\Repositories\VAuD_Project\skip+
+// VAuD_Project/skip+
 import java.util.AbstractMap.SimpleEntry;
 import simulator.NodeGenerator;
 import simulator.Node;
@@ -85,7 +85,7 @@ new SimpleEntry<String, String>("forwardedNode", "simulator.Node")}));
 attr.add(new SimpleEntry<String, Entry<String, String>[]>("sortedLeftNeighbors",new SimpleEntry[] {
 new SimpleEntry<String, String>("level", "int")}));
 attr.add(new SimpleEntry<String, Entry<String, String>[]>("sortedRightNeighbors",new SimpleEntry[] {
-new SimpleEntry<String, String>("currentLevel", "int")}));
+new SimpleEntry<String, String>("level", "int")}));
 attr.add(new SimpleEntry<String, Entry<String, String>[]>("bubbleSort",new SimpleEntry[] {}));
 Entry<String, Entry<String, String>[]>[] result = new Entry[attr.size()];
 attr.toArray(result);
@@ -267,12 +267,16 @@ clearArray(v8,true);
 int v12 = 0;
 for(v12=0;(v12<v1);v12=v12+1){{
 funsortedLeftNeighbors(v12);int v13 = 0;
-for(v13=(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1);(v13>1);v13=v13-1){{
+for(v13=(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1);(v13>0);v13=v13-1){{
 {if ((getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null)!=null) (getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null).send("linearize",false,(getArrayIndex(v8,null,(v13-1))!=null?((Edge)(getArrayIndex(v8,null,(v13-1)))).node:null));}
-}
+if((id(this)==3)){{
+print(((("linearize "+id((getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null)))+" with ")+id((getArrayIndex(v8,null,(v13-1))!=null?((Edge)(getArrayIndex(v8,null,(v13-1)))).node:null))));}
+}}
 }if(((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null)){{
 {if ((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null) (getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null).send("linearize",false,this);}
-}
+if((id(this)==3)){{
+print((("linearize "+id((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)))+" with node 3"));}
+}}
 }setArrayIndex('=',v10,Arrays.asList(v12),(getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null),null,1);
 clearArray(v8,true);
 funsortedRightNeighbors(v12);int v14 = 0;
@@ -304,7 +308,9 @@ if((getArrayIndex(v10,null,v12)!=null)){{
 }}
  catch (ArithmeticException e){ print("arithmetic exception in timeout: "+e.getMessage()); } return ;} long callCounterlinearize;
 protected void funlinearize(simulator.Node p17) { callCounterlinearize++; try {
-String v18 = "";
+if(((id(this)==1)&&(id(p17)==3))){{
+print("linearize function at node 1 with node 3");}
+}String v18 = "";
 v18=funbitfolge(id(p17));
 int v19 = 0;
 HashMap<String, simulator.Node> v20 = new HashMap<String, simulator.Node>();
@@ -340,17 +346,16 @@ updateVisualization(v4,p17,true,"black",0,(v19+"_succ1"));
 updateVisualization(v5,p17,true,"black",0,v18);
 }
 } else {if(funcheckIfNodeInRange(v19, p17)){{
+updateVisualization(v5,p17,true,"black",0,v18);
 if((id(p17)>id(this))){{
 if((funinteger(sub_str(v18, v19, (v19+1)))==1)){{
 if((id(p17)<id((getArrayIndex(v4,null,(v19+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_succ1")))).node:null)))){{
 print(((("better succ_1 found: "+id(p17))+" is new succ1 instead of ")+id((getArrayIndex(v4,null,(v19+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_succ1")))).node:null))));updateVisualization(v4,p17,true,"black",0,(v19+"_succ1"));
-updateVisualization(v5,p17,true,"black",0,v18);
 }
 }}
 } else {{
 if((id(p17)<id((getArrayIndex(v4,null,(v19+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_succ0")))).node:null)))){{
 print(((("better succ_0 found: "+id(p17))+" is new succ0 instead of ")+id((getArrayIndex(v4,null,(v19+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_succ0")))).node:null))));updateVisualization(v4,p17,true,"black",0,(v19+"_succ0"));
-updateVisualization(v5,p17,true,"black",0,v18);
 }
 }}
 }}
@@ -358,13 +363,11 @@ updateVisualization(v5,p17,true,"black",0,v18);
 if((funinteger(sub_str(v18, v19, (v19+1)))==1)){{
 if((id(p17)>id((getArrayIndex(v4,null,(v19+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_pred1")))).node:null)))){{
 print(((("better pred_1 found: "+id(p17))+" is new pred_1 instead of ")+id((getArrayIndex(v4,null,(v19+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_pred1")))).node:null))));updateVisualization(v4,p17,true,"black",0,(v19+"_pred1"));
-updateVisualization(v5,p17,true,"black",0,v18);
 }
 }}
 } else {{
 if((id(p17)>id((getArrayIndex(v4,null,(v19+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_pred0")))).node:null)))){{
 print(((("better pred_0 found: "+id(p17))+" is new pred_0 instead of ")+id((getArrayIndex(v4,null,(v19+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v19+"_pred0")))).node:null))));updateVisualization(v4,p17,true,"black",0,(v19+"_pred0"));
-updateVisualization(v5,p17,true,"black",0,v18);
 }
 }}
 }}
@@ -683,36 +686,80 @@ v93=(v93+1);
 }}
 
 }
-funbubbleSort();{if(this.TRUE)return ;}}
- catch (ArithmeticException e){ print("arithmetic exception in sortedLeftNeighbors: "+e.getMessage()); } return ;} long callCountersortedRightNeighbors;
-protected void funsortedRightNeighbors(int p96) { callCountersortedRightNeighbors++; try {
+if((p92==0)){{
+List<simulator.Node> v96 = new ArrayList<simulator.Node>();
 int v97 = 0;
-clearArray(v8,true);
 for(Entry<?,?> ev5:v5.entrySet()){
 String i98=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
 simulator.Node i99=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if((funcheckIfNodeOnLevel(p96, i99)&&(id(i99)>id(this)))){{
-updateVisualization(v8,i99,true,"black",1,v97);
+if((id(i99)<id(this))){{
+setArrayIndex('=',v96,Arrays.asList(v97),i99,null,1);
 v97=(v97+1);
 }
 }}
 
 }
-funbubbleSort();{if(this.TRUE)return ;}}
+int v100 = 0;
+if((length(v96)!=length((List<Node>)copyEdgeArrayToNodeArray(v8,1)))){{
+for(v100=0;(v100<length((List<Node>)copyEdgeArrayToNodeArray(v8,1)));v100=v100+1){{
+print(((("tempArray["+v100)+"]: ")+id((getArrayIndex(v8,null,v100)!=null?((Edge)(getArrayIndex(v8,null,v100))).node:null))));}
+}for(v100=0;(v100<length(v96));v100=v100+1){{
+print(((("checkArray["+v100)+"]: ")+id(getArrayIndex(v96,null,v100))));}
+}print(("length(checkArray): "+length(v96)));print(("length(tempArray): "+length((List<Node>)copyEdgeArrayToNodeArray(v8,1))));print((("Error in sortedLeftNeighbors at node "+id(this))+": Not all left neighbors on level 0 collected!"));}
+}}
+}funbubbleSort();{if(this.TRUE)return ;}}
+ catch (ArithmeticException e){ print("arithmetic exception in sortedLeftNeighbors: "+e.getMessage()); } return ;} long callCountersortedRightNeighbors;
+protected void funsortedRightNeighbors(int p101) { callCountersortedRightNeighbors++; try {
+int v102 = 0;
+clearArray(v8,true);
+for(Entry<?,?> ev5:v5.entrySet()){
+String i103=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i104=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
+{
+if((funcheckIfNodeOnLevel(p101, i104)&&(id(i104)>id(this)))){{
+updateVisualization(v8,i104,true,"black",1,v102);
+v102=(v102+1);
+}
+}}
+
+}
+if((p101==0)){{
+List<simulator.Node> v105 = new ArrayList<simulator.Node>();
+int v106 = 0;
+for(Entry<?,?> ev5:v5.entrySet()){
+String i107=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i108=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
+{
+if((id(i108)>id(this))){{
+setArrayIndex('=',v105,Arrays.asList(v106),i108,null,1);
+v106=(v106+1);
+}
+}}
+
+}
+int v109 = 0;
+if((length(v105)!=length((List<Node>)copyEdgeArrayToNodeArray(v8,1)))){{
+for(v109=0;(v109<length((List<Node>)copyEdgeArrayToNodeArray(v8,1)));v109=v109+1){{
+print(((("tempArray["+v109)+"]: ")+id((getArrayIndex(v8,null,v109)!=null?((Edge)(getArrayIndex(v8,null,v109))).node:null))));}
+}for(v109=0;(v109<length(v105));v109=v109+1){{
+print(((("checkArray["+v109)+"]: ")+id(getArrayIndex(v105,null,v109))));}
+}print(("length(checkArray): "+length(v105)));print(("length(tempArray): "+length((List<Node>)copyEdgeArrayToNodeArray(v8,1))));print((("Error in sortedRightNeighbors at node "+id(this))+": Not all right neighbors on level 0 collected!"));}
+}}
+}funbubbleSort();{if(this.TRUE)return ;}}
  catch (ArithmeticException e){ print("arithmetic exception in sortedRightNeighbors: "+e.getMessage()); } return ;} long callCounterbubbleSort;
 protected void funbubbleSort() { callCounterbubbleSort++; try {
-int v100 = 0;
-v100=length((List<Node>)copyEdgeArrayToNodeArray(v8,1));
-int v101 = 0;
-int v102 = 0;
-simulator.Node v103 = null;
-for(v101=0;(v101<(v100-1));v101=v101+1){{
-for(v102=0;(v102<((v100-v101)-1));v102=v102+1){{
-if((id((getArrayIndex(v8,null,v102)!=null?((Edge)(getArrayIndex(v8,null,v102))).node:null))>id((getArrayIndex(v8,null,(v102+1))!=null?((Edge)(getArrayIndex(v8,null,(v102+1)))).node:null)))){{
-v103=(getArrayIndex(v8,null,v102)!=null?((Edge)(getArrayIndex(v8,null,v102))).node:null);
-updateVisualization(v8,(getArrayIndex(v8,null,(v102+1))!=null?((Edge)(getArrayIndex(v8,null,(v102+1)))).node:null),true,"black",1,v102);
-updateVisualization(v8,v103,true,"black",1,(v102+1));
+int v110 = 0;
+v110=length((List<Node>)copyEdgeArrayToNodeArray(v8,1));
+int v111 = 0;
+int v112 = 0;
+simulator.Node v113 = null;
+for(v111=0;(v111<(v110-1));v111=v111+1){{
+for(v112=0;(v112<((v110-v111)-1));v112=v112+1){{
+if((id((getArrayIndex(v8,null,v112)!=null?((Edge)(getArrayIndex(v8,null,v112))).node:null))>id((getArrayIndex(v8,null,(v112+1))!=null?((Edge)(getArrayIndex(v8,null,(v112+1)))).node:null)))){{
+v113=(getArrayIndex(v8,null,v112)!=null?((Edge)(getArrayIndex(v8,null,v112))).node:null);
+updateVisualization(v8,(getArrayIndex(v8,null,(v112+1))!=null?((Edge)(getArrayIndex(v8,null,(v112+1)))).node:null),true,"black",1,v112);
+updateVisualization(v8,v113,true,"black",1,(v112+1));
 }
 }}
 }}
