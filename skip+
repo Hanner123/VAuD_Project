@@ -20,67 +20,6 @@ succPredListclientNode{
     }
 
     timeout() {
-        /*Debug*/
-        /*
-        if(id(this) == 1){
-            int counter_3;
-            for (string bitString : node neighbor : neighbors){
-                if (id(neighbor) == 3){
-                    print("!!!!!!!!!!!!!!!!!!!!Node 1 has neighbor 3!!!!!!!!!!!!!!!!!!!!!!!");
-                    BREAKPOINT
-                }
-            }
-            int level_test = 0;
-            for(level_test = 0; level_test < limit; level_test++) {
-                if(id(succPredList[level_test + "_succ0"]) == 1){
-                    print("!!!!!!!!!!!!!!!!!!!!Node 1 has _succ0 3!!!!!!!!!!!!!!!!!!!!!!!");
-                    BREAKPOINT
-                }
-                if(id(succPredList[level_test + "_succ1"]) == 1){
-                   print("!!!!!!!!!!!!!!!!!!!!Node 1 has _succ1 3!!!!!!!!!!!!!!!!!!!!!!!");
-                    BREAKPOINT
-                }
-                if(id(succPredList[level_test + "_pred0"]) == 1){
-                    print("!!!!!!!!!!!!!!!!!!!!Node 1 has _pred0 3!!!!!!!!!!!!!!!!!!!!!!!");
-                    BREAKPOINT
-                }
-                if(id(succPredList[level_test + "_pred1"]) == 1){
-                    print("!!!!!!!!!!!!!!!!!!!!Node 1 has _pred1 3!!!!!!!!!!!!!!!!!!!!!!!");
-                    BREAKPOINT
-                }
-            }
-        }
-        int level_test = 0;
-        int counter_3 = 0;
-        if(id(this) == 3){
-            for(level_test = 0; level_test < limit; level_test++) {
-                if(id(succPredList[level_test + "_succ0"]) == 1){
-                    counter_3 = counter_3 + 1;
-                }
-                if(id(succPredList[level_test + "_succ1"]) == 1){
-                    counter_3 = counter_3 + 1;
-                }
-                if(id(succPredList[level_test + "_pred0"]) == 1){
-                    counter_3 = counter_3 + 1;
-                }
-                if(id(succPredList[level_test + "_pred1"]) == 1){
-                    counter_3 = counter_3 + 1;
-                }
-            }
-            for (string bitString : node neighbor : neighbors){
-                if (id(neighbor) == 1){
-                    counter_3 = counter_3 + 1;
-                }
-            }
-            if (counter_3 > 2){
-                print("!!!!!!!!!!!!!!!!!!!!Node 3 has three connections to 1!!!!!!!!!!!!!!!!!!!!!!!");
-                BREAKPOINT
-        
-            }
-        }
-        */
-        
-
         if (deleted == true){
             return;
         }
@@ -102,15 +41,9 @@ succPredListclientNode{
             int i;
             for(i= length(tempArray) - 1; i > 0; i --){ /*größer 0, denn dann wird auch noch das letzte element der neighbors (an stelle 0) mit dem an stelle 1 verbunden*/
                 tempArray[i] -> linearize(tempArray[i-1]);
-                if(id(this) == 3){
-                    print("linearize " + id(tempArray[i]) +" with " + id(tempArray[i-1]));
-                }
             }
             if(tempArray[0] != null){
                 tempArray[0] -> linearize(this); 
-                if(id(this) == 3){
-                    print("linearize " + id(tempArray[0]) +" with node 3");
-                }
             }
             nearestLeft[currentLevel] = tempArray[0];
             
@@ -154,9 +87,6 @@ succPredListclientNode{
 
 
     linearize(node v){
-        if((id(this) == 1) && (id(v)==3)){
-            print("linearize function at node 1 with node 3");
-        }
         string vBit;
         vBit = bitfolge(id(v));
 
@@ -182,10 +112,7 @@ succPredListclientNode{
             /*Self Node */
             return;
         }
-        /*bool[] inRangeOnLevels; 
-        for(currentLevel = 0; currentLevel<limit; currentLevel++){
-            inRangeOnLevels[currentLevel] = true;
-        }*/
+
         for(currentLevel = 0; currentLevel<limit; currentLevel++){
             if(checkIfNodeOnLevel(currentLevel, v)){  
 
@@ -244,35 +171,8 @@ succPredListclientNode{
                         }
                     }
                 }
-                /*else{
-                    inRangeOnLevels[currentLevel] = false;
-                }*/
-            }
-            /*else{
-                inRangeOnLevels[currentLevel] = false;
-            }*/
-        }
-        /*Check if v is not in range on all levels (= is not recorded in neighbors) -> forward v*/
-
-        
-        if(neighbors[bitString] == null){
-            print("node " + id(v) + " has to be forwarded.");
-            forwardNode(v);
-            return;
-        }
-            
-        /*
-        for(currentLevel = 0; currentLevel<limit; currentLevel++){
-            if(inRangeOnLevels[currentLevel] == true){
-                break;
-            }
-            if(currentLevel == limit -1){
-                print("node " + id(v) + " has to be forwarded by node " + id(this));
-                forwardNode(v);
-                return;
             }
         }
-        */
 
 
         /*Check which nodes are needed for the new neighbors map */
@@ -308,6 +208,13 @@ succPredListclientNode{
         /*Forward not necessary nodes */
         for (node oldNeighbor : toBeforwardedNodes){
             forwardNode(oldNeighbor);
+        }
+
+
+        /*Forward node v if not added to neighbors */
+        if(neighbors[bitString] == null){
+            forwardNode(v);
+            return;
         }
     }
     
@@ -561,7 +468,7 @@ succPredListclientNode{
 
         bool inRange;
         inRange = false;
-            
+
         if ((minPred != null) && (maxSucc != null)){       
             bool biggerThanSucc;
             biggerThanSucc = false;
@@ -628,6 +535,7 @@ succPredListclientNode{
                 }
             }
             int j = 0;
+            /*ToDO das alles raus? */
             if(length(checkArray) != length(tempArray)){
                 for(j = 0; j < length(tempArray); j++){
                     print("tempArray[" + j + "]: " + id(tempArray[j]));

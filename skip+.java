@@ -1,4 +1,4 @@
-// VAuD_Project/skip+
+// C:\Users\joshu\Repositories\VAuD_Project\skip+
 import java.util.AbstractMap.SimpleEntry;
 import simulator.NodeGenerator;
 import simulator.Node;
@@ -269,14 +269,10 @@ for(v12=0;(v12<v1);v12=v12+1){{
 funsortedLeftNeighbors(v12);int v13 = 0;
 for(v13=(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1);(v13>0);v13=v13-1){{
 {if ((getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null)!=null) (getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null).send("linearize",false,(getArrayIndex(v8,null,(v13-1))!=null?((Edge)(getArrayIndex(v8,null,(v13-1)))).node:null));}
-if((id(this)==3)){{
-print(((("linearize "+id((getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null)))+" with ")+id((getArrayIndex(v8,null,(v13-1))!=null?((Edge)(getArrayIndex(v8,null,(v13-1)))).node:null))));}
-}}
+}
 }if(((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null)){{
 {if ((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null) (getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null).send("linearize",false,this);}
-if((id(this)==3)){{
-print((("linearize "+id((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)))+" with node 3"));}
-}}
+}
 }setArrayIndex('=',v10,Arrays.asList(v12),(getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null),null,1);
 clearArray(v8,true);
 funsortedRightNeighbors(v12);int v14 = 0;
@@ -308,9 +304,7 @@ if((getArrayIndex(v10,null,v12)!=null)){{
 }}
  catch (ArithmeticException e){ print("arithmetic exception in timeout: "+e.getMessage()); } return ;} long callCounterlinearize;
 protected void funlinearize(simulator.Node p17) { callCounterlinearize++; try {
-if(((id(this)==1)&&(id(p17)==3))){{
-print("linearize function at node 1 with node 3");}
-}String v18 = "";
+String v18 = "";
 v18=funbitfolge(id(p17));
 int v19 = 0;
 HashMap<String, simulator.Node> v20 = new HashMap<String, simulator.Node>();
@@ -414,6 +408,8 @@ updateVisualization(v5,i34,true,"black",0,i33);
 }
 for(simulator.Node i35:createIterable(v29)){{
 funforwardNode(i35);}
+}if(((getArrayIndex(v5,null,v2)!=null?((Edge)(getArrayIndex(v5,null,v2))).node:null)==null)){{
+funforwardNode(p17);{if(this.TRUE)return ;}}
 }}
  catch (ArithmeticException e){ print("arithmetic exception in linearize: "+e.getMessage()); } return ;} long callCounterentry;
 protected void funentry(simulator.Node p36) { callCounterentry++; try {
