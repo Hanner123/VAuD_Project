@@ -459,32 +459,32 @@ if(v3){{
 }if(((getArrayIndex(v6,null,funbitfolge(id(p42)))!=null?((Edge)(getArrayIndex(v6,null,funbitfolge(id(p42))))).node:null)==p42)){{
 {if(this.TRUE)return ;}}
 }updateVisualization(v6,p42,true,"red",0,funbitfolge(id(p42)));
-int v43 = 0;
 for(Entry<?,?> ev5:v5.entrySet()){
-String i44=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
-simulator.Node i45=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
+String i43=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
+simulator.Node i44=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if((i45==p42)){{
-updateVisualization(v5,null,true,"black",0,i44);
+if((i44==p42)){{
+updateVisualization(v5,null,true,"black",0,i43);
 }
-} else {if((i45!=null)){{
-{if (i45!=null) i45.send("forgetNode",false,p42);}
+} else {if((i44!=null)){{
+{if (i44!=null) i44.send("forgetNode",false,p42);}
 }
 }}}
 
 }
-for(v43=0;(v43<v1);v43=v43+1){{
-if(((getArrayIndex(v4,null,(v43+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred0")))).node:null)==p42)){{
-updateVisualization(v4,null,true,"black",0,(v43+"_pred0"));
+int v45 = 0;
+for(v45=0;(v45<v1);v45=v45+1){{
+if(((getArrayIndex(v4,null,(v45+"_pred0"))!=null?((Edge)(getArrayIndex(v4,null,(v45+"_pred0")))).node:null)==p42)){{
+updateVisualization(v4,null,true,"black",0,(v45+"_pred0"));
 }
-}if(((getArrayIndex(v4,null,(v43+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_pred1")))).node:null)==p42)){{
-updateVisualization(v4,null,true,"black",0,(v43+"_pred1"));
+}if(((getArrayIndex(v4,null,(v45+"_pred1"))!=null?((Edge)(getArrayIndex(v4,null,(v45+"_pred1")))).node:null)==p42)){{
+updateVisualization(v4,null,true,"black",0,(v45+"_pred1"));
 }
-}if(((getArrayIndex(v4,null,(v43+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ0")))).node:null)==p42)){{
-updateVisualization(v4,null,true,"black",0,(v43+"_succ0"));
+}if(((getArrayIndex(v4,null,(v45+"_succ0"))!=null?((Edge)(getArrayIndex(v4,null,(v45+"_succ0")))).node:null)==p42)){{
+updateVisualization(v4,null,true,"black",0,(v45+"_succ0"));
 }
-}if(((getArrayIndex(v4,null,(v43+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v43+"_succ1")))).node:null)==p42)){{
-updateVisualization(v4,null,true,"black",0,(v43+"_succ1"));
+}if(((getArrayIndex(v4,null,(v45+"_succ1"))!=null?((Edge)(getArrayIndex(v4,null,(v45+"_succ1")))).node:null)==p42)){{
+updateVisualization(v4,null,true,"black",0,(v45+"_succ1"));
 }
 }}
 }}
@@ -696,66 +696,36 @@ v93=(v93+1);
 }}
 
 }
-if((p92==0)){{
-List<simulator.Node> v96 = new ArrayList<simulator.Node>();
+funbubbleSort();{if(this.TRUE)return ;}}
+ catch (ArithmeticException e){ print("arithmetic exception in sortedLeftNeighbors: "+e.getMessage()); } return ;} long callCountersortedRightNeighbors;
+protected void funsortedRightNeighbors(int p96) { callCountersortedRightNeighbors++; try {
 int v97 = 0;
+clearArray(v8,true);
 for(Entry<?,?> ev5:v5.entrySet()){
 String i98=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
 simulator.Node i99=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
 {
-if((id(i99)<id(this))){{
-setArrayIndex('=',v96,Arrays.asList(v97),i99,null,1);
+if((funcheckIfNodeOnLevel(p96, i99)&&(id(i99)>id(this)))){{
+updateVisualization(v8,i99,true,"black",1,v97);
 v97=(v97+1);
 }
 }}
 
 }
-}
-}funbubbleSort();{if(this.TRUE)return ;}}
- catch (ArithmeticException e){ print("arithmetic exception in sortedLeftNeighbors: "+e.getMessage()); } return ;} long callCountersortedRightNeighbors;
-protected void funsortedRightNeighbors(int p100) { callCountersortedRightNeighbors++; try {
-int v101 = 0;
-clearArray(v8,true);
-for(Entry<?,?> ev5:v5.entrySet()){
-String i102=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
-simulator.Node i103=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
-{
-if((funcheckIfNodeOnLevel(p100, i103)&&(id(i103)>id(this)))){{
-updateVisualization(v8,i103,true,"black",1,v101);
-v101=(v101+1);
-}
-}}
-
-}
-if((p100==0)){{
-List<simulator.Node> v104 = new ArrayList<simulator.Node>();
-int v105 = 0;
-for(Entry<?,?> ev5:v5.entrySet()){
-String i106=(String) (ev5.getKey() instanceof Edge ? ((Edge)ev5.getKey()).node : ev5.getKey());
-simulator.Node i107=(simulator.Node) (ev5.getValue() instanceof Edge ? ((Edge)ev5.getValue()).node : ev5.getValue());
-{
-if((id(i107)>id(this))){{
-setArrayIndex('=',v104,Arrays.asList(v105),i107,null,1);
-v105=(v105+1);
-}
-}}
-
-}
-}
-}funbubbleSort();{if(this.TRUE)return ;}}
+funbubbleSort();{if(this.TRUE)return ;}}
  catch (ArithmeticException e){ print("arithmetic exception in sortedRightNeighbors: "+e.getMessage()); } return ;} long callCounterbubbleSort;
 protected void funbubbleSort() { callCounterbubbleSort++; try {
-int v108 = 0;
-v108=length((List<Node>)copyEdgeArrayToNodeArray(v8,1));
-int v109 = 0;
-int v110 = 0;
-simulator.Node v111 = null;
-for(v109=0;(v109<(v108-1));v109=v109+1){{
-for(v110=0;(v110<((v108-v109)-1));v110=v110+1){{
-if((id((getArrayIndex(v8,null,v110)!=null?((Edge)(getArrayIndex(v8,null,v110))).node:null))>id((getArrayIndex(v8,null,(v110+1))!=null?((Edge)(getArrayIndex(v8,null,(v110+1)))).node:null)))){{
-v111=(getArrayIndex(v8,null,v110)!=null?((Edge)(getArrayIndex(v8,null,v110))).node:null);
-updateVisualization(v8,(getArrayIndex(v8,null,(v110+1))!=null?((Edge)(getArrayIndex(v8,null,(v110+1)))).node:null),true,"black",1,v110);
-updateVisualization(v8,v111,true,"black",1,(v110+1));
+int v100 = 0;
+v100=length((List<Node>)copyEdgeArrayToNodeArray(v8,1));
+int v101 = 0;
+int v102 = 0;
+simulator.Node v103 = null;
+for(v101=0;(v101<(v100-1));v101=v101+1){{
+for(v102=0;(v102<((v100-v101)-1));v102=v102+1){{
+if((id((getArrayIndex(v8,null,v102)!=null?((Edge)(getArrayIndex(v8,null,v102))).node:null))>id((getArrayIndex(v8,null,(v102+1))!=null?((Edge)(getArrayIndex(v8,null,(v102+1)))).node:null)))){{
+v103=(getArrayIndex(v8,null,v102)!=null?((Edge)(getArrayIndex(v8,null,v102))).node:null);
+updateVisualization(v8,(getArrayIndex(v8,null,(v102+1))!=null?((Edge)(getArrayIndex(v8,null,(v102+1)))).node:null),true,"black",1,v102);
+updateVisualization(v8,v103,true,"black",1,(v102+1));
 }
 }}
 }}
