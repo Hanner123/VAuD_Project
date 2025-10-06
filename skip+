@@ -139,7 +139,7 @@ succPredListclientNode{
                     neighbors[vBit] = v;
                 }
                 else if (checkIfNodeInRange(currentLevel, v)){
-                    /*if v is in range_i it has to be in the neighbor list -ZU VIELE NEIGHBORS (5 hat 1 als neighbor, falsch)*/
+                    /*if v is in range_i it has to be in the neighbor list */
                     neighbors[vBit] = v;
                     /*decide if v should be in succPredList*/
                     if (id(v) > id(this)){
@@ -175,7 +175,9 @@ succPredListclientNode{
         }
 
 
-        /*Check which nodes are needed for the new neighbors map */
+        /*Update neighbors - forward nodes out of range */
+
+        /*Check which nodes are needed for the new neighbors map (to keep)*/
         for(currentLevel = 0; currentLevel<limit; currentLevel++){
             for (string bitString : node neighbor : neighbors){
                 if(checkIfNodeOnLevel(currentLevel, neighbor)){
@@ -210,7 +212,6 @@ succPredListclientNode{
         for (node oldNeighbor : toBeforwardedNodes){
             forwardNode(oldNeighbor);
         }
-
 
         /*Forward node v if not added to neighbors */
         if(neighbors[bitString] == null){
@@ -272,7 +273,7 @@ succPredListclientNode{
             return;
         }
         toBeDeleted[bitfolge((id(v)))] = v;
-        int currentLevel;
+        
 
         for (string bitString : node neighbor : neighbors){ 
             if(neighbor == v){
@@ -283,6 +284,7 @@ succPredListclientNode{
             }
         }
 
+        int currentLevel;
         for (currentLevel = 0; currentLevel < limit; currentLevel++){
             if(succPredList[currentLevel + "_pred0"] == v){
                 succPredList[currentLevel + "_pred0"] = null;
@@ -539,17 +541,6 @@ succPredListclientNode{
                 i = i+1;
             }
         }
-        /*debug*/
-        if(level == 0){
-            node[] checkArray;
-            int ileft = 0;
-            for (string neighborBit : node neighbor : neighbors){
-                if (id(neighbor) < id(this)){ /*collect smaller nodes*/
-                    checkArray[ileft] = neighbor;
-                    ileft = ileft+1;
-                }
-            }
-        }
         bubbleSort();
         return;
     }
@@ -564,24 +555,12 @@ succPredListclientNode{
                 i = i+1;
             }
         }
-        /*debug*/
-        if(level == 0){
-            node[] checkArray;
-            int iright = 0;
-            for (string neighborBit : node neighbor : neighbors){
-                
-                if (id(neighbor) > id(this)){ /*collect smaller nodes*/
-                    checkArray[iright] = neighbor;
-                    iright = iright+1;
-                }
-            }
-        }
         bubbleSort();
         return;
     }
 
     bubbleSort () {
-        /*sort tempArray with bubble sort (descending) */
+        /*sort tempArray with bubble sort (ascending) */
         int n;
         n = length(tempArray);
         int i;
