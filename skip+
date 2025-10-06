@@ -1,5 +1,5 @@
 succPredListclientNode{
-    int limit = 5;
+    int limit = 6;
     string bitString;
     bool deleted = false;
     [string, node] succPredList;
@@ -185,7 +185,7 @@ succPredListclientNode{
                     /*To make sure the succ pred list will not be forwarded*/
                     if(inRange && (neighbor != null)){ 
                         globalNewNeighbors[bitString] = neighbor;
-                    }
+                    }/*
                     else if(succPredList[currentLevel + "_pred0"] == neighbor){
                         globalNewNeighbors[bitString] = neighbor;
                     }
@@ -197,6 +197,7 @@ succPredListclientNode{
                     }
                     else if(succPredList[currentLevel + "_succ1"] == neighbor){
                         globalNewNeighbors[bitString] = neighbor;
+                    }*/
                 }
             }
         }
@@ -244,6 +245,7 @@ succPredListclientNode{
             print("Node " + id(this) + " found!");
             return;
         }
+        print("Searching for node " + searchedId);
         node nextNeighbor;
         for (string bitString : node neighbor : neighbors){ 
             if(id(neighbor) == searchedId){
@@ -291,7 +293,21 @@ succPredListclientNode{
             else if (neighbor != null){
                 neighbor -> forgetNode(v);
             }
-            
+        }
+
+        for (currentLevel = 0; currentLevel < limit; currentLevel++){
+            if(succPredList[currentLevel + "_pred0"] == v){
+                succPredList[currentLevel + "_pred0"] = null;
+            }
+            if(succPredList[currentLevel + "_pred1"] == v){
+                succPredList[currentLevel + "_pred1"] = null;
+            }
+            if(succPredList[currentLevel + "_succ0"] == v){
+                succPredList[currentLevel + "_succ0"] = null;
+            }
+            if(succPredList[currentLevel + "_succ1"] == v){
+                succPredList[currentLevel + "_succ1"] = null;
+            }
         }
     }
 
@@ -545,20 +561,6 @@ succPredListclientNode{
                     ileft = ileft+1;
                 }
             }
-            int j = 0;
-            /*ToDO das alles raus? */
-            if(length(checkArray) != length(tempArray)){
-                for(j = 0; j < length(tempArray); j++){
-                    print("tempArray[" + j + "]: " + id(tempArray[j]));
-                }
-                for(j = 0; j < length(checkArray); j++){
-                    print("checkArray[" + j + "]: " + id(checkArray[j]));
-                }
-                print("length(checkArray): " + length(checkArray));
-                print("length(tempArray): " + length(tempArray));
-                print("Error in sortedLeftNeighbors at node " + id(this) + ": Not all left neighbors on level 0 collected!");
-            }
-            
         }
         bubbleSort();
         return;
@@ -585,19 +587,6 @@ succPredListclientNode{
                     iright = iright+1;
                 }
             }
-            int j = 0;
-            if(length(checkArray) != length(tempArray)){
-                for(j = 0; j < length(tempArray); j++){
-                    print("tempArray[" + j + "]: " + id(tempArray[j]));
-                }
-                for(j = 0; j < length(checkArray); j++){
-                    print("checkArray[" + j + "]: " + id(checkArray[j]));
-                }
-                print("length(checkArray): " + length(checkArray));
-                print("length(tempArray): " + length(tempArray));
-                print("Error in sortedRightNeighbors at node " + id(this) + ": Not all right neighbors on level 0 collected!");
-            }
-            
         }
         bubbleSort();
         return;
