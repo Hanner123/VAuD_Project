@@ -39,26 +39,26 @@ succPredListclientNode{
             sortedLeftNeighbors(currentLevel); /*leftNeighbors are sorted and copied into tempArray*/
 
             int i;
-            for(i= length(tempArray) - 1; i > 0; i --){ 
-                tempArray[i] -> linearize(tempArray[i-1]);
+            for(i= 0; i < length(tempArray)-1; i++){ 
+                tempArray[i] -> linearize(tempArray[i+1]);
             }
-            if(tempArray[0] != null){
-                tempArray[0] -> linearize(this); 
+            if(tempArray[length(tempArray)-1] != null){
+                tempArray[length(tempArray)-1] -> linearize(this); 
             }
-            nearestLeft[currentLevel] = tempArray[0];
+            nearestLeft[currentLevel] = tempArray[length(tempArray)-1];
             
             /*Introduce right neighbors */
             tempArray <<<<; /*delete tempArray for sorted neighbors */
             sortedRightNeighbors(currentLevel); /*rightNeighbors are sorted and copied into tempArray*/
 
             int j;
-            for(j= 0; j < length(tempArray)-1; j++){ 
-                tempArray[j] -> linearize(tempArray[j+1]);
+            for(j= length(tempArray) - 1; j > 0; j--){ 
+                tempArray[j] -> linearize(tempArray[j-1]);
             } 
-            if(tempArray[length(tempArray) - 1] != null){
-                tempArray[length(tempArray) - 1] -> linearize(this); 
+            if(tempArray[0] != null){
+                tempArray[0] -> linearize(this); 
             }
-            nearestRight[currentLevel] = tempArray[length(tempArray)-1];
+            nearestRight[currentLevel] = tempArray[0];
         }
 
         /* Rule 1b */
@@ -67,7 +67,7 @@ succPredListclientNode{
             tempArray <<<<; /*delete tempArray for sorted neighbors */
             sortedLeftNeighbors(currentLevel); /*leftNeighbors are sorted and copied into tempArray*/
             int i;
-            for(i = 0; i< length(tempArray); i++){
+            for(i = 0; i < length(tempArray); i++){
                 if(nearestRight[currentLevel] != null){
                     tempArray[i] -> linearize(nearestRight[currentLevel]);
                 }

@@ -1,4 +1,4 @@
-// C:\Users\joshu\Repositories\VAuD_Project\skip+
+// VAuD_Project/skip+
 import java.util.AbstractMap.SimpleEntry;
 import simulator.NodeGenerator;
 import simulator.Node;
@@ -267,22 +267,22 @@ clearArray(v8,true);
 int v12 = 0;
 for(v12=0;(v12<v1);v12=v12+1){{
 funsortedLeftNeighbors(v12);int v13 = 0;
-for(v13=(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1);(v13>0);v13=v13-1){{
-{if ((getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null)!=null) (getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null).send("linearize",false,(getArrayIndex(v8,null,(v13-1))!=null?((Edge)(getArrayIndex(v8,null,(v13-1)))).node:null));}
-}
-}if(((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null)){{
-{if ((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null) (getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null).send("linearize",false,this);}
-}
-}setArrayIndex('=',v10,Arrays.asList(v12),(getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null),null,1);
-clearArray(v8,true);
-funsortedRightNeighbors(v12);int v14 = 0;
-for(v14=0;(v14<(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1));v14=v14+1){{
-{if ((getArrayIndex(v8,null,v14)!=null?((Edge)(getArrayIndex(v8,null,v14))).node:null)!=null) (getArrayIndex(v8,null,v14)!=null?((Edge)(getArrayIndex(v8,null,v14))).node:null).send("linearize",false,(getArrayIndex(v8,null,(v14+1))!=null?((Edge)(getArrayIndex(v8,null,(v14+1)))).node:null));}
+for(v13=0;(v13<(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1));v13=v13+1){{
+{if ((getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null)!=null) (getArrayIndex(v8,null,v13)!=null?((Edge)(getArrayIndex(v8,null,v13))).node:null).send("linearize",false,(getArrayIndex(v8,null,(v13+1))!=null?((Edge)(getArrayIndex(v8,null,(v13+1)))).node:null));}
 }
 }if(((getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1))!=null?((Edge)(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1)))).node:null)!=null)){{
 {if ((getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1))!=null?((Edge)(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1)))).node:null)!=null) (getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1))!=null?((Edge)(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1)))).node:null).send("linearize",false,this);}
 }
-}setArrayIndex('=',v11,Arrays.asList(v12),(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1))!=null?((Edge)(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1)))).node:null),null,1);
+}setArrayIndex('=',v10,Arrays.asList(v12),(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1))!=null?((Edge)(getArrayIndex(v8,null,(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1)))).node:null),null,1);
+clearArray(v8,true);
+funsortedRightNeighbors(v12);int v14 = 0;
+for(v14=(length((List<Node>)copyEdgeArrayToNodeArray(v8,1))-1);(v14>0);v14=v14-1){{
+{if ((getArrayIndex(v8,null,v14)!=null?((Edge)(getArrayIndex(v8,null,v14))).node:null)!=null) (getArrayIndex(v8,null,v14)!=null?((Edge)(getArrayIndex(v8,null,v14))).node:null).send("linearize",false,(getArrayIndex(v8,null,(v14-1))!=null?((Edge)(getArrayIndex(v8,null,(v14-1)))).node:null));}
+}
+}if(((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null)){{
+{if ((getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null)!=null) (getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null).send("linearize",false,this);}
+}
+}setArrayIndex('=',v11,Arrays.asList(v12),(getArrayIndex(v8,null,0)!=null?((Edge)(getArrayIndex(v8,null,0))).node:null),null,1);
 }
 }for(v12=0;(v12<v1);v12=v12+1){{
 clearArray(v8,true);
