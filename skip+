@@ -185,19 +185,7 @@ succPredListclientNode{
                     /*To make sure the succ pred list will not be forwarded*/
                     if(inRange && (neighbor != null)){ 
                         globalNewNeighbors[bitString] = neighbor;
-                    }/*
-                    else if(succPredList[currentLevel + "_pred0"] == neighbor){
-                        globalNewNeighbors[bitString] = neighbor;
                     }
-                    else if(succPredList[currentLevel + "_pred1"] == neighbor){
-                        globalNewNeighbors[bitString] = neighbor;
-                    }
-                    else if(succPredList[currentLevel + "_succ0"] == neighbor){
-                        globalNewNeighbors[bitString] = neighbor;
-                    }
-                    else if(succPredList[currentLevel + "_succ1"] == neighbor){
-                        globalNewNeighbors[bitString] = neighbor;
-                    }*/
                 }
             }
         }
@@ -593,7 +581,7 @@ succPredListclientNode{
     }
 
     bubbleSort () {
-        /*sort tempArray with bubble sort*/
+        /*sort tempArray with bubble sort (descending) */
         int n;
         n = length(tempArray);
         int i;
