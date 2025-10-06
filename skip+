@@ -181,10 +181,22 @@ succPredListclientNode{
                 if(checkIfNodeOnLevel(currentLevel, neighbor)){
                     bool inRange;
                     inRange = checkIfNodeInRange(currentLevel, neighbor);
-
+                    
+                    /*To make sure the succ pred list will not be forwarded*/
                     if(inRange && (neighbor != null)){ 
                         globalNewNeighbors[bitString] = neighbor;
                     }
+                    else if(succPredList[currentLevel + "_pred0"] == neighbor){
+                        globalNewNeighbors[bitString] = neighbor;
+                    }
+                    else if(succPredList[currentLevel + "_pred1"] == neighbor){
+                        globalNewNeighbors[bitString] = neighbor;
+                    }
+                    else if(succPredList[currentLevel + "_succ0"] == neighbor){
+                        globalNewNeighbors[bitString] = neighbor;
+                    }
+                    else if(succPredList[currentLevel + "_succ1"] == neighbor){
+                        globalNewNeighbors[bitString] = neighbor;
                 }
             }
         }
@@ -214,7 +226,6 @@ succPredListclientNode{
         /*Forward node v if not added to neighbors */
         if(neighbors[bitString] == null){
             forwardNode(v);
-            return;
         }
     }
     

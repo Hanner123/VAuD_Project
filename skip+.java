@@ -1,4 +1,4 @@
-// C:\Users\joshu\Repositories\VAuD_Project\skip+
+// VAuD_Project/skip+
 import java.util.AbstractMap.SimpleEntry;
 import simulator.NodeGenerator;
 import simulator.Node;
@@ -409,7 +409,7 @@ updateVisualization(v5,i34,true,"black",0,i33);
 for(simulator.Node i35:createIterable(v29)){{
 funforwardNode(i35);}
 }if(((getArrayIndex(v5,null,v2)!=null?((Edge)(getArrayIndex(v5,null,v2))).node:null)==null)){{
-funforwardNode(p17);{if(this.TRUE)return ;}}
+funforwardNode(p17);}
 }}
  catch (ArithmeticException e){ print("arithmetic exception in linearize: "+e.getMessage()); } return ;} long callCounterentry;
 protected void funentry(simulator.Node p36) { callCounterentry++; try {
