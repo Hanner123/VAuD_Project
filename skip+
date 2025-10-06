@@ -39,7 +39,7 @@ succPredListclientNode{
             sortedLeftNeighbors(currentLevel); /*leftNeighbors are sorted and copied into tempArray*/
 
             int i;
-            for(i= length(tempArray) - 1; i > 0; i --){ /*größer 0, denn dann wird auch noch das letzte element der neighbors (an stelle 0) mit dem an stelle 1 verbunden*/
+            for(i= length(tempArray) - 1; i > 0; i --){ 
                 tempArray[i] -> linearize(tempArray[i-1]);
             }
             if(tempArray[0] != null){
@@ -52,7 +52,7 @@ succPredListclientNode{
             sortedRightNeighbors(currentLevel); /*rightNeighbors are sorted and copied into tempArray*/
 
             int j;
-            for(j= 0; j < length(tempArray)-1; j++){ /*length-1 ist das letzte element -> sollte passen*/
+            for(j= 0; j < length(tempArray)-1; j++){ 
                 tempArray[j] -> linearize(tempArray[j+1]);
             } 
             if(tempArray[length(tempArray) - 1] != null){
@@ -298,7 +298,7 @@ succPredListclientNode{
         for (currentLevel = 0; currentLevel < limit; currentLevel++){
             if(succPredList[currentLevel + "_pred0"] == v){
                 succPredList[currentLevel + "_pred0"] = null;
-            }
+            }   
             if(succPredList[currentLevel + "_pred1"] == v){
                 succPredList[currentLevel + "_pred1"] = null;
             }
